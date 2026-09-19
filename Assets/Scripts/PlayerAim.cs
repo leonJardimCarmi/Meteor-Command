@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
 {
+    [SerializeField] private Battery _battery;
+
     private Camera _camera;
     private Plane _playPlane;
 
@@ -23,7 +25,7 @@ public class PlayerAim : MonoBehaviour
     {
         if (TryGetPlanePoint(out Vector3 point))
         {
-            Debug.Log("Aim point: " + point);
+            _battery.TryFire(point);
         }
     }
 
