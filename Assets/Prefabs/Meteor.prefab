@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62fd958f4de8e342924e39e433fbd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Meteor
-  _largeScale: 1
-  _smallScale: 0.5
+  _largeScale: 4
+  _smallScale: 2
   _fragmentSpreadAngle: 25
