@@ -9,6 +9,9 @@ public class Blast : MonoBehaviour
     [SerializeField] private float _shrinkTime = 0.35f;
 
     private WaitForSeconds _hold;
+    private static int _nextId = 1;
+
+    public int Id { get; private set; }
 
     private void Awake()
     {
@@ -17,7 +20,15 @@ public class Blast : MonoBehaviour
 
     private void OnEnable()
     {
+        Id = _nextId++;
         StartCoroutine(Detonate());
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Meteor meteor))
+        {
+            meteor.Kill(Id);
+        }
     }
 
     private IEnumerator Detonate()
@@ -46,4 +57,5 @@ public class Blast : MonoBehaviour
     {
         transform.localScale = Vector3.one * (radius * 2f);
     }
+
 }
