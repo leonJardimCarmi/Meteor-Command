@@ -33,6 +33,7 @@ public class Interceptor : MonoBehaviour
 
     private void Arrive()
     {
+        PoolManager.Instance.Get(PoolType.Blast, _target, Quaternion.identity);
         PoolManager.Instance.Release(gameObject);
     }
 }
