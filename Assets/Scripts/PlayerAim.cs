@@ -12,6 +12,20 @@ public class PlayerAim : MonoBehaviour
         _camera = Camera.main;
         _playPlane = new Plane(Vector3.forward, Vector3.zero);
     }
+    private void OnEnable()
+    {
+        GameManager.GameOver += DisableAiming;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.GameOver -= DisableAiming;
+    }
+
+    private void DisableAiming()
+    {
+        enabled = false;
+    }
 
     private void Update()
     {

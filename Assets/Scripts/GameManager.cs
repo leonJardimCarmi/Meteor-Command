@@ -36,6 +36,5 @@ public class GameManager : MonoBehaviour
     {
         IsGameOver = true;
         GameOver?.Invoke();
-        Debug.Log("Game Over");
     }
 }

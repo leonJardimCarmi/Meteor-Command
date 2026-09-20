@@ -14,6 +14,20 @@ public class WaveSpawner : MonoBehaviour
     {
         StartCoroutine(SpawnLoop());
     }
+    private void OnEnable()
+    {
+        GameManager.GameOver += StopSpawning;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.GameOver -= StopSpawning;
+    }
+
+    private void StopSpawning()
+    {
+        StopAllCoroutines();
+    }
 
     private IEnumerator SpawnLoop()
     {
