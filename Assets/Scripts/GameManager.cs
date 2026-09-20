@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
             EndGame();
         }
     }
-    
+
     public void AddKill(int killNumber)
     {
         if (IsGameOver)
@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
         // The Nth kill of one blast is worth (2N - 1) x base points, so N kills total N x N x base.
         Score += _killPoints * (2 * killNumber - 1);
         ScoreChanged?.Invoke(Score);
-        Debug.Log($"Score: {Score}");
     }
 
     private void EndGame()
