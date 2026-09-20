@@ -5,19 +5,9 @@ public class Battery : MonoBehaviour
 {
     public static event Action<int> AmmoChanged;
 
-    [SerializeField] private int _startingAmmo = 20;
     [SerializeField] private Vector3 _launchOffset = new Vector3(0f, 1.5f, 0f);
 
     public int Ammo { get; private set; }
-
-    private void Awake()
-    {
-        Ammo = _startingAmmo;
-    }
-    private void Start()
-    {
-        AmmoChanged?.Invoke(Ammo);
-    }
 
     public void Refill(int amount)
     {

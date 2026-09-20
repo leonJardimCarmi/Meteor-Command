@@ -43,6 +43,11 @@ public class PoolManager : MonoBehaviour
             }
         }
     }
+    
+    public int CountActive(PoolType type)
+    {
+        return _pools[type].ActiveCount;
+    }
 
     private void CreatePools()
     {

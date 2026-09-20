@@ -323,7 +323,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a58e4c407cbd442bfc40d5cbcbfe2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  _battery: {fileID: 694698916}
   _killPoints: 100
+  _ammoPerWave: 20
+  _unusedAmmoBonus: 25
 --- !u!4 &266960889
 Transform:
   m_ObjectHideFlags: 0
@@ -905,7 +908,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ddc33c5127141428825108bddf34c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Battery
-  _startingAmmo: 20
   _launchOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &722463940
 GameObject:

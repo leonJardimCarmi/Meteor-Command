@@ -5,9 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static event Action GameOver;
     public static event Action<int> ScoreChanged;
-    [SerializeField] private int _killPoints = 100;
 
     public static GameManager Instance { get; private set; }
+
+    [SerializeField] private Battery _battery;
+    [SerializeField] private int _killPoints = 100;
+    [SerializeField] private int _ammoPerWave = 20;
+    [SerializeField] private int _unusedAmmoBonus = 25;
 
     public bool IsGameOver { get; private set; }
     public int Score { get; private set; }
@@ -27,12 +31,9 @@ public class GameManager : MonoBehaviour
         City.Destroyed -= OnCityDestroyed;
     }
 
-    private void OnCityDestroyed()
+    private void Start()
     {
-        if (CityManager.Instance.CountAlive() == 0)
-        {
-            EndGame();
-        }
+        _battery.Refill(_ammoPerWave);
     }
 
     public void AddKill(int killNumber)
@@ -43,8 +44,27 @@ public class GameManager : MonoBehaviour
         }
 
         // The Nth kill of one blast is worth (2N - 1) x base points, so N kills total N x N x base.
-        Score += _killPoints * (2 * killNumber - 1);
+        AddScore(_killPoints * (2 * killNumber - 1));
+    }
+
+    public void CompleteWave()
+    {
+        AddScore(_battery.Ammo * _unusedAmmoBonus);
+        _battery.Refill(_ammoPerWave);
+    }
+
+    private void AddScore(int points)
+    {
+        Score += points;
         ScoreChanged?.Invoke(Score);
+    }
+
+    private void OnCityDestroyed()
+    {
+        if (CityManager.Instance.CountAlive() == 0)
+        {
+            EndGame();
+        }
     }
 
     private void EndGame()
