@@ -23,6 +23,7 @@ public class Blast : MonoBehaviour
         Id = _nextId++;
         StartCoroutine(Detonate());
     }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Meteor meteor))

@@ -29,7 +29,7 @@ public class CityManager : MonoBehaviour
 
         foreach (City city in _cities)
         {
-            float distance = Vector3.Distance(city.transform.position, point);
+            float distance = Mathf.Abs(city.transform.position.x - point.x);
 
             if (city.IsAlive && distance <= bestDistance)
             {

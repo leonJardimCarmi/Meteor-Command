@@ -41,7 +41,7 @@ public class Meteor : MonoBehaviour
     {
         Move();
 
-        if (transform.position.y <= 0f)
+        if (HasReachedGround())
         {
             HitGround();
         }
@@ -50,6 +50,12 @@ public class Meteor : MonoBehaviour
     private void Move()
     {
         transform.position += _direction * (_speed * Time.deltaTime);
+    }
+    
+    private bool HasReachedGround()
+    {
+        float radius = transform.localScale.x * 0.5f;
+        return transform.position.y - radius <= 0f;
     }
 
     private void HitGround()
