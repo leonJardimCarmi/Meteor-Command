@@ -10,6 +10,7 @@ public class Blast : MonoBehaviour
 
     private WaitForSeconds _hold;
     private static int _nextId = 1;
+    private int _kills;
 
     public int Id { get; private set; }
 
@@ -21,15 +22,22 @@ public class Blast : MonoBehaviour
     private void OnEnable()
     {
         Id = _nextId++;
+        _kills = 0;
         StartCoroutine(Detonate());
     }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Meteor meteor))
+        if (other.TryGetComponent(out Meteor meteor) && meteor.Kill(Id))
         {
-            meteor.Kill(Id);
+            RegisterKill();
         }
+    }
+
+    private void RegisterKill()
+    {
+        _kills++;
+        GameManager.Instance.AddKill(_kills);
     }
 
     private IEnumerator Detonate()
