@@ -40,4 +40,19 @@ public class CityManager : MonoBehaviour
 
         return target;
     }
+    
+    public int CountAlive()
+    {
+        int alive = 0;
+
+        foreach (City city in _cities)
+        {
+            if (city.IsAlive)
+            {
+                alive++;
+            }
+        }
+
+        return alive;
+    }
 }
