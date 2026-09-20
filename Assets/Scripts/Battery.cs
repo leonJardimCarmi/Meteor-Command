@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class Battery : MonoBehaviour
 {
+    public static event Action<int> AmmoChanged;
+
     [SerializeField] private int _startingAmmo = 20;
     [SerializeField] private Vector3 _launchOffset = new Vector3(0f, 1.5f, 0f);
 
@@ -11,10 +14,15 @@ public class Battery : MonoBehaviour
     {
         Ammo = _startingAmmo;
     }
+    private void Start()
+    {
+        AmmoChanged?.Invoke(Ammo);
+    }
 
     public void Refill(int amount)
     {
         Ammo = amount;
+        AmmoChanged?.Invoke(Ammo);
     }
 
     public bool TryFire(Vector3 target)
@@ -25,6 +33,7 @@ public class Battery : MonoBehaviour
         }
 
         Ammo--;
+        AmmoChanged?.Invoke(Ammo);
         LaunchInterceptor(target);
         return true;
     }
