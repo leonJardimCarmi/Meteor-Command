@@ -54,6 +54,7 @@ public class Meteor : MonoBehaviour
 
     private void HitGround()
     {
+        CityManager.Instance.HitAt(transform.position);
         PoolManager.Instance.Release(gameObject);
     }
 
