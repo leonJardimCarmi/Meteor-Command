@@ -4,6 +4,7 @@ using UnityEngine;
 public class Battery : MonoBehaviour
 {
     public static event Action<int> AmmoChanged;
+    public static event Action Fired;
 
     [SerializeField] private Vector3 _launchOffset = new Vector3(0f, 1.5f, 0f);
 
@@ -25,6 +26,7 @@ public class Battery : MonoBehaviour
         Ammo--;
         AmmoChanged?.Invoke(Ammo);
         LaunchInterceptor(target);
+        Fired?.Invoke();
         return true;
     }
 

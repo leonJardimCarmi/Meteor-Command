@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
+    public static event System.Action Destroyed;
+    public static event System.Action Impacted;
+
     [SerializeField] private float _largeScale = 1f;
     [SerializeField] private float _smallScale = 0.5f;
     [SerializeField] private float _fragmentSpreadAngle = 25f;
@@ -34,6 +37,7 @@ public class Meteor : MonoBehaviour
         }
 
         PoolManager.Instance.Release(gameObject);
+        Destroyed?.Invoke();
         return true;
     }
 
@@ -51,7 +55,7 @@ public class Meteor : MonoBehaviour
     {
         transform.position += _direction * (_speed * Time.deltaTime);
     }
-    
+
     private bool HasReachedGround()
     {
         float radius = transform.localScale.x * 0.5f;
@@ -62,6 +66,7 @@ public class Meteor : MonoBehaviour
     {
         CityManager.Instance.HitAt(transform.position);
         PoolManager.Instance.Release(gameObject);
+        Impacted?.Invoke();
     }
 
     private void SpawnFragment(float angle, int blastId)

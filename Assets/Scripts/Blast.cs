@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Blast : MonoBehaviour
 {
+    public static event System.Action Detonated;
+
     [SerializeField] private float _radius = 3f;
     [SerializeField] private float _expandTime = 0.35f;
     [SerializeField] private float _holdTime = 0.15f;
@@ -23,9 +25,10 @@ public class Blast : MonoBehaviour
     {
         Id = _nextId++;
         _kills = 0;
+        Detonated?.Invoke();
         StartCoroutine(Detonate());
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Meteor meteor) && meteor.Kill(Id))
