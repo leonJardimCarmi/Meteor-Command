@@ -7,9 +7,16 @@ public class CityManager : MonoBehaviour
     [SerializeField] private City[] _cities;
     [SerializeField] private float _hitRadius = 2f;
 
+    public int CityCount => _cities.Length;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    public bool IsCityAlive(int index)
+    {
+        return _cities[index].IsAlive;
     }
 
     public void HitAt(Vector3 point)
