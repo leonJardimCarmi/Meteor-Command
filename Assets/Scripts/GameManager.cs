@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
+    private const string HighScoreKey = "HighScore";
+
     private static bool _skipMenu;
 
     [SerializeField] private Battery _battery;
@@ -26,12 +28,15 @@ public class GameManager : MonoBehaviour
 
     public GameState State { get; private set; } = GameState.Menu;
     public int Score { get; private set; }
+    public int HighScore { get; private set; }
+    public bool IsNewHighScore { get; private set; }
 
     public bool IsPlaying => State == GameState.Playing;
 
     private void Awake()
     {
         Instance = this;
+        HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
     }
 
     private void OnEnable()
@@ -100,6 +105,19 @@ public class GameManager : MonoBehaviour
     private void EndGame()
     {
         State = GameState.GameOver;
+        SaveHighScore();
         GameOver?.Invoke();
+    }
+
+    private void SaveHighScore()
+    {
+        IsNewHighScore = Score > HighScore;
+
+        if (IsNewHighScore)
+        {
+            HighScore = Score;
+            PlayerPrefs.SetInt(HighScoreKey, HighScore);
+            PlayerPrefs.Save();
+        }
     }
 }

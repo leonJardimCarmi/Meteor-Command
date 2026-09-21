@@ -13,10 +13,12 @@ public class UIManager : MonoBehaviour
     [Header("Main Menu")]
     [SerializeField] private GameObject _menuPanel;
     [SerializeField] private Button _playButton;
+    [SerializeField] private TextMeshProUGUI _menuBestLabel;
 
     [Header("Game Over")]
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private TextMeshProUGUI _finalScoreLabel;
+    [SerializeField] private TextMeshProUGUI _gameOverBestLabel;
     [SerializeField] private Button _restartButton;
     [SerializeField] private float _restartLockout = 0.5f;
 
@@ -46,6 +48,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _menuPanel.SetActive(!GameManager.Instance.IsPlaying);
+        _menuBestLabel.text = $"Best: {GameManager.Instance.HighScore}";
     }
 
     private void ShowScore(int score)
@@ -71,6 +74,7 @@ public class UIManager : MonoBehaviour
     private void ShowGameOver()
     {
         _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score}";
+        _gameOverBestLabel.text = GameManager.Instance.IsNewHighScore ? "NEW BEST!" : $"Best: {GameManager.Instance.HighScore}";
         _gameOverPanel.SetActive(true);
         StartCoroutine(UnlockRestart());
     }
