@@ -7,7 +7,7 @@ public class ObjectPool
     private readonly Transform _parent;
     private readonly Queue<GameObject> _available = new Queue<GameObject>();
     private readonly HashSet<GameObject> _all = new HashSet<GameObject>();
-    
+
     public int ActiveCount => _all.Count - _available.Count;
 
     public ObjectPool(GameObject prefab, int initialCount, Transform parent)

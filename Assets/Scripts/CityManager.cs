@@ -19,6 +19,21 @@ public class CityManager : MonoBehaviour
         return _cities[index].IsAlive;
     }
 
+    public int CountAlive()
+    {
+        int alive = 0;
+
+        foreach (City city in _cities)
+        {
+            if (city.IsAlive)
+            {
+                alive++;
+            }
+        }
+
+        return alive;
+    }
+
     public void HitAt(Vector3 point)
     {
         City target = FindTarget(point);
@@ -46,20 +61,5 @@ public class CityManager : MonoBehaviour
         }
 
         return target;
-    }
-    
-    public int CountAlive()
-    {
-        int alive = 0;
-
-        foreach (City city in _cities)
-        {
-            if (city.IsAlive)
-            {
-                alive++;
-            }
-        }
-
-        return alive;
     }
 }
