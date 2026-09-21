@@ -2420,6 +2420,10 @@ MonoBehaviour:
   _scoreLabel: {fileID: 1148350474}
   _ammoLabel: {fileID: 942029005}
   _waveLabel: {fileID: 1237650971}
+  _gameOverPanel: {fileID: 1218737373}
+  _finalScoreLabel: {fileID: 1065313491}
+  _restartButton: {fileID: 559869656}
+  _restartLockout: 0.5
 --- !u!4 &1430282442
 Transform:
   m_ObjectHideFlags: 0
