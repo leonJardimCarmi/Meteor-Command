@@ -9,10 +9,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreLabel;
     [SerializeField] private TextMeshProUGUI _ammoLabel;
     [SerializeField] private TextMeshProUGUI _waveLabel;
+    [SerializeField] private int _lowAmmo = 5;
+    [SerializeField] private Color _lowAmmoColor = new Color(1f, 0.25f, 0.2f);
 
     [Header("Main Menu")]
     [SerializeField] private GameObject _menuPanel;
     [SerializeField] private Button _playButton;
+    [SerializeField] private Button _quitButton;
     [SerializeField] private TextMeshProUGUI _menuBestLabel;
 
     [Header("Game Over")]
@@ -20,7 +23,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _finalScoreLabel;
     [SerializeField] private TextMeshProUGUI _gameOverBestLabel;
     [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _menuButton;
     [SerializeField] private float _restartLockout = 0.5f;
+
+    private Color _normalAmmoColor;
+
+    private void Awake()
+    {
+        _normalAmmoColor = _ammoLabel.color;
+    }
 
     private void OnEnable()
     {
@@ -30,7 +41,9 @@ public class UIManager : MonoBehaviour
         Battery.AmmoChanged += ShowAmmo;
         WaveSpawner.WaveStarted += ShowWave;
         _playButton.onClick.AddListener(StartGame);
+        _quitButton.onClick.AddListener(Quit);
         _restartButton.onClick.AddListener(Restart);
+        _menuButton.onClick.AddListener(ReturnToMenu);
         ShowScore(0);
     }
 
@@ -42,7 +55,9 @@ public class UIManager : MonoBehaviour
         Battery.AmmoChanged -= ShowAmmo;
         WaveSpawner.WaveStarted -= ShowWave;
         _playButton.onClick.RemoveListener(StartGame);
+        _quitButton.onClick.RemoveListener(Quit);
         _restartButton.onClick.RemoveListener(Restart);
+        _menuButton.onClick.RemoveListener(ReturnToMenu);
     }
 
     private void Start()
@@ -58,7 +73,8 @@ public class UIManager : MonoBehaviour
 
     private void ShowAmmo(int ammo)
     {
-        _ammoLabel.text = $"Ammo: {ammo}";
+        _ammoLabel.text = $"Ammo: {ammo} / {GameManager.Instance.AmmoPerWave}";
+        _ammoLabel.color = ammo < _lowAmmo ? _lowAmmoColor : _normalAmmoColor;
     }
 
     private void ShowWave(int wave)
@@ -76,14 +92,20 @@ public class UIManager : MonoBehaviour
         _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score}";
         _gameOverBestLabel.text = GameManager.Instance.IsNewHighScore ? "NEW BEST!" : $"Best: {GameManager.Instance.HighScore}";
         _gameOverPanel.SetActive(true);
-        StartCoroutine(UnlockRestart());
+        StartCoroutine(UnlockGameOverButtons());
     }
 
-    private IEnumerator UnlockRestart()
+    private IEnumerator UnlockGameOverButtons()
     {
-        _restartButton.interactable = false;
+        SetGameOverButtonsInteractable(false);
         yield return new WaitForSeconds(_restartLockout);
-        _restartButton.interactable = true;
+        SetGameOverButtonsInteractable(true);
+    }
+
+    private void SetGameOverButtonsInteractable(bool interactable)
+    {
+        _restartButton.interactable = interactable;
+        _menuButton.interactable = interactable;
     }
 
     private void StartGame()
@@ -91,8 +113,18 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.StartGame();
     }
 
+    private void Quit()
+    {
+        GameManager.Instance.Quit();
+    }
+
     private void Restart()
     {
         GameManager.Instance.Restart();
+    }
+
+    private void ReturnToMenu()
+    {
+        GameManager.Instance.ReturnToMenu();
     }
 }

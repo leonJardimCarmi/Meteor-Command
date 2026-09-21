@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public bool IsNewHighScore { get; private set; }
 
     public bool IsPlaying => State == GameState.Playing;
+    public int AmmoPerWave => _ammoPerWave;
 
     private void Awake()
     {
@@ -67,8 +68,21 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        _skipMenu = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ReloadScene(skipMenu: true);
+    }
+
+    public void ReturnToMenu()
+    {
+        ReloadScene(skipMenu: false);
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     public void AddKill(int killNumber)
@@ -86,6 +100,12 @@ public class GameManager : MonoBehaviour
     {
         AddScore(_battery.Ammo * _unusedAmmoBonus);
         _battery.Refill(_ammoPerWave);
+    }
+
+    private void ReloadScene(bool skipMenu)
+    {
+        _skipMenu = skipMenu;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void AddScore(int points)
