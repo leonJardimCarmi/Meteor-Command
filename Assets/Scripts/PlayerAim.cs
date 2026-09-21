@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerAim : MonoBehaviour
 {
@@ -46,9 +45,11 @@ public class PlayerAim : MonoBehaviour
         _isWaveIntro = false;
     }
 
+    // The HUD has no buttons during play, and the menu panels only exist outside of it, so the game state
+    // alone decides whether a click may fire. Checking the pointer against UI text would swallow clicks.
     private bool CanFire()
     {
-        return GameManager.Instance.IsPlaying && !_isWaveIntro && !EventSystem.current.IsPointerOverGameObject();
+        return GameManager.Instance.IsPlaying && !_isWaveIntro;
     }
 
     private void HandleClick()

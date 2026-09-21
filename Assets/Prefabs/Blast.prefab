@@ -171,6 +171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlastLight
   _color: {r: 0.3, g: 0.9, b: 1, a: 1}
-  _maxIntensity: 6
+  _maxIntensity: 80
   _range: 14
   _distanceInFront: 4

@@ -7,7 +7,7 @@ using UnityEngine;
 public class BlastLight : MonoBehaviour
 {
     [SerializeField] private Color _color = new Color(0.3f, 0.9f, 1f);
-    [SerializeField] private float _maxIntensity = 6f;
+    [SerializeField] private float _maxIntensity = 80f;
     [SerializeField] private float _range = 14f;
     [SerializeField] private float _distanceInFront = 4f;
 
