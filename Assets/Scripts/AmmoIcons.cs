@@ -25,6 +25,15 @@ public class AmmoIcons : MonoBehaviour
 
     private void Start()
     {
+        // The template must be a child of this object. If the script sits on the template itself, every
+        // copy would create more copies without end, so stop here instead.
+        if (_template == null || _template.transform.parent != transform)
+        {
+            Debug.LogError("AmmoIcons must be on the parent object, with the icon as a child in the Template field.", this);
+            enabled = false;
+            return;
+        }
+
         CreateIcons();
         Refresh(_ammo);
     }
