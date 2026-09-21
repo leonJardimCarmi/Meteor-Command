@@ -2,9 +2,9 @@ using System.Collections;
 using UnityEngine;
 
 // An explosion built from up to five particle layers: sparks and an expanding ring (always), and for a
-// fiery explosion also a fireball, a puff of smoke and flying debris. All the layers are set up in code,
-// so the prefab only needs this script, a ParticleSystem, the spark material and the smoke material.
-// Instances are pooled and return themselves when the explosion is over.
+// fiery explosion also a fireball, a puff of glowing smoke and flying embers. All the layers are set up in
+// code and share the one glowing (additive) material, so the prefab only needs this script, a
+// ParticleSystem and that material. Instances are pooled and return themselves when the explosion is over.
 [RequireComponent(typeof(ParticleSystem))]
 public class ExplosionEffect : MonoBehaviour
 {
@@ -28,20 +28,19 @@ public class ExplosionEffect : MonoBehaviour
     [SerializeField] private float _fireballSpeed = 1.4f;
 
     [Header("Smoke")]
-    [SerializeField] private Material _smokeMaterial;
     [SerializeField] private int _smokeCount = 14;
     [SerializeField] private float _smokeLifetime = 1.8f;
     [SerializeField] private float _smokeSize = 2.4f;
     [SerializeField] private float _smokeRise = -0.12f;
-    [SerializeField] private Color _smokeColor = new Color(1f, 1f, 1f, 0.75f);
+    [SerializeField] private Color _smokeColor = new Color(1f, 1f, 1f, 0.6f);
 
-    [Header("Debris")]
+    [Header("Embers")]
     [SerializeField] private int _debrisCount = 9;
     [SerializeField] private float _debrisLifetime = 0.9f;
     [SerializeField] private float _debrisSize = 0.35f;
     [SerializeField] private float _debrisSpeed = 6f;
     [SerializeField] private float _debrisGravity = 2.2f;
-    [SerializeField] private Color _debrisColor = new Color(0.55f, 0.36f, 0.24f, 1f);
+    [SerializeField] private Color _debrisColor = new Color(1f, 0.55f, 0.2f, 1f);
 
     private ParticleSystem _sparks;
     private ParticleSystem _ring;
@@ -56,8 +55,8 @@ public class ExplosionEffect : MonoBehaviour
 
         _ring = CreateLayer("Ring", sparkMaterial);
         _fireball = CreateLayer("Fireball", sparkMaterial);
-        _smoke = CreateLayer("Smoke", _smokeMaterial);
-        _debris = CreateLayer("Debris", _smokeMaterial);
+        _smoke = CreateLayer("Smoke", sparkMaterial);
+        _debris = CreateLayer("Debris", sparkMaterial);
 
         ConfigureSparks();
         ConfigureRing();
@@ -113,11 +112,6 @@ public class ExplosionEffect : MonoBehaviour
 
     private void PlaySmoke(float size)
     {
-        if (_smokeMaterial == null)
-        {
-            return;
-        }
-
         ParticleSystem.MainModule main = _smoke.main;
         main.startColor = _smokeColor;
         main.startSize = new ParticleSystem.MinMaxCurve(_smokeSize * size * 0.6f, _smokeSize * size);
@@ -128,11 +122,6 @@ public class ExplosionEffect : MonoBehaviour
 
     private void PlayDebris(float size)
     {
-        if (_smokeMaterial == null)
-        {
-            return;
-        }
-
         ParticleSystem.MainModule main = _debris.main;
         main.startColor = _debrisColor;
         main.startSize = new ParticleSystem.MinMaxCurve(_debrisSize * size * 0.5f, _debrisSize * size);
