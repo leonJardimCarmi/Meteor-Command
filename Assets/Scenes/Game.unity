@@ -2618,7 +2618,7 @@ MonoBehaviour:
   _impact: {fileID: 8300000, guid: e2c0b63aa9da31945aabb1fdadcadcec, type: 3}
   _cityLost: {fileID: 8300000, guid: c02377aae89c4214a88fd4cd0f677472, type: 3}
   _waveStart: {fileID: 8300000, guid: 3a6db70660edf964280d941a578d8a0c, type: 3}
-  _gameStart: {fileID: 0}
+  _gameStart: {fileID: 8300000, guid: ff752777152922a4384ece4d5199df35, type: 3}
   _gameOver: {fileID: 8300000, guid: 27c987d1d3749b04d8abd00528923bf7, type: 3}
   _music: {fileID: 8300000, guid: 5fd079fe74f0837469a2f335313d9c13, type: 3}
   _musicVolume: 0.743
