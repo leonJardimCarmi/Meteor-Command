@@ -4,6 +4,8 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     public static event System.Action<int> WaveStarted;
+    public static event System.Action WaveSpawning;
+
     [Header("Wave size")]
     [SerializeField] private int _meteorsBase = 6;
     [SerializeField] private int _meteorsPerWave = 3;
@@ -69,6 +71,7 @@ public class WaveSpawner : MonoBehaviour
             _wave++;
             WaveStarted?.Invoke(_wave);
             yield return new WaitForSeconds(_pauseBetweenWaves);
+            WaveSpawning?.Invoke();
             yield return StartCoroutine(SpawnWave());
             yield return new WaitUntil(IsSkyEmpty);
             GameManager.Instance.CompleteWave();

@@ -7,11 +7,24 @@ public class PlayerAim : MonoBehaviour
 
     private Camera _camera;
     private Plane _playPlane;
+    private bool _isWaveIntro;
 
     private void Awake()
     {
         _camera = Camera.main;
         _playPlane = new Plane(Vector3.forward, Vector3.zero);
+    }
+
+    private void OnEnable()
+    {
+        WaveSpawner.WaveStarted += OnWaveStarted;
+        WaveSpawner.WaveSpawning += OnWaveSpawning;
+    }
+
+    private void OnDisable()
+    {
+        WaveSpawner.WaveStarted -= OnWaveStarted;
+        WaveSpawner.WaveSpawning -= OnWaveSpawning;
     }
 
     private void Update()
@@ -22,9 +35,20 @@ public class PlayerAim : MonoBehaviour
         }
     }
 
+    // Shots are ignored while the wave banner is up, so no ammo is wasted before the sky is visible.
+    private void OnWaveStarted(int wave)
+    {
+        _isWaveIntro = true;
+    }
+
+    private void OnWaveSpawning()
+    {
+        _isWaveIntro = false;
+    }
+
     private bool CanFire()
     {
-        return GameManager.Instance.IsPlaying && !EventSystem.current.IsPointerOverGameObject();
+        return GameManager.Instance.IsPlaying && !_isWaveIntro && !EventSystem.current.IsPointerOverGameObject();
     }
 
     private void HandleClick()
