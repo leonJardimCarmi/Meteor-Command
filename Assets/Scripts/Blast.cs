@@ -30,14 +30,14 @@ public class Blast : MonoBehaviour
     {
         if (other.TryGetComponent(out Meteor meteor) && meteor.Kill(Id))
         {
-            RegisterKill();
+            RegisterKill(meteor.transform.position);
         }
     }
 
-    private void RegisterKill()
+    private void RegisterKill(Vector3 position)
     {
         _kills++;
-        GameManager.Instance.AddKill(_kills);
+        GameManager.Instance.AddKill(_kills, position);
     }
 
     private IEnumerator Detonate()

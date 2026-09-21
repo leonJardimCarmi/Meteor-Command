@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// Spawns a spark burst for the main game events: a meteor destroyed, a meteor hitting the ground
-// and an interceptor reaching its target.
+// Spawns the visual feedback for the main game events: a spark burst when a meteor is destroyed, hits
+// the ground or an interceptor arrives, and a floating score number for every kill.
 public class EffectSpawner : MonoBehaviour
 {
     [SerializeField] private Color _destroyedColor = new Color(1f, 0.55f, 0.15f);
@@ -15,6 +15,7 @@ public class EffectSpawner : MonoBehaviour
         Meteor.Destroyed += OnMeteorDestroyed;
         Meteor.Impacted += OnMeteorImpacted;
         Interceptor.Arrived += OnInterceptorArrived;
+        GameManager.KillScored += OnKillScored;
     }
 
     private void OnDisable()
@@ -22,6 +23,7 @@ public class EffectSpawner : MonoBehaviour
         Meteor.Destroyed -= OnMeteorDestroyed;
         Meteor.Impacted -= OnMeteorImpacted;
         Interceptor.Arrived -= OnInterceptorArrived;
+        GameManager.KillScored -= OnKillScored;
     }
 
     private void OnMeteorDestroyed(Vector3 position, float size)
@@ -37,6 +39,17 @@ public class EffectSpawner : MonoBehaviour
     private void OnInterceptorArrived(Vector3 position)
     {
         Spawn(position, _blastColor, _blastSize);
+    }
+
+    private void OnKillScored(Vector3 position, int points, int killNumber)
+    {
+        if (!PoolManager.Instance.HasPool(PoolType.Popup))
+        {
+            return;
+        }
+
+        GameObject popup = PoolManager.Instance.Get(PoolType.Popup, position, Quaternion.identity);
+        popup.GetComponent<ScorePopup>().Show(points, killNumber);
     }
 
     private void Spawn(Vector3 position, Color color, float size)

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static event Action GameStarted;
     public static event Action GameOver;
     public static event Action<int> ScoreChanged;
+    public static event Action<Vector3, int, int> KillScored;
 
     public static GameManager Instance { get; private set; }
 
@@ -85,7 +86,7 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    public void AddKill(int killNumber)
+    public void AddKill(int killNumber, Vector3 position)
     {
         if (!IsPlaying)
         {
@@ -93,7 +94,9 @@ public class GameManager : MonoBehaviour
         }
 
         // The Nth kill of one blast is worth (2N - 1) x base points, so N kills total N x N x base.
-        AddScore(_killPoints * (2 * killNumber - 1));
+        int points = _killPoints * (2 * killNumber - 1);
+        AddScore(points);
+        KillScored?.Invoke(position, points, killNumber);
     }
 
     public void CompleteWave()

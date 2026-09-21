@@ -280,10 +280,12 @@ MonoBehaviour:
   _interceptorPrefab: {fileID: 7004197092538645033, guid: 95c08818f0fd4e24098a7cf0c7098879, type: 3}
   _blastPrefab: {fileID: 6316633372610656790, guid: 17ce188d6c9fe094e931194a835e0b56, type: 3}
   _effectPrefab: {fileID: 5949129245380672738, guid: 6cc954b71986977478c4fe75b9a90a84, type: 3}
+  _popupPrefab: {fileID: 1716035754278936106, guid: 5e2b850f5eaef8a4f9057f927a9ef2f1, type: 3}
   _meteorCount: 80
   _interceptorCount: 25
   _blastCount: 25
   _effectCount: 30
+  _popupCount: 20
 --- !u!4 &204030846
 Transform:
   m_ObjectHideFlags: 0
@@ -4044,8 +4046,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Click to fire an interceptor at that point.
 
-    Large meteors split
-    into two smaller ones.
+    Large meteors split into
+    two smaller ones.
 
     Destroying several at once is worth far more.'
   m_isRightToLeft: 0
