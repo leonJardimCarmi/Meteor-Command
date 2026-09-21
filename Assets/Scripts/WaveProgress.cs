@@ -6,6 +6,8 @@ public class WaveProgress : MonoBehaviour
 {
     [SerializeField] private RectTransform _fill;
 
+    private float _shown = -1f;
+
     private void OnEnable()
     {
         WaveSpawner.ProgressChanged += Show;
@@ -18,6 +20,12 @@ public class WaveProgress : MonoBehaviour
 
     private void Show(float remaining)
     {
+        if (Mathf.Approximately(remaining, _shown))
+        {
+            return;
+        }
+
+        _shown = remaining;
         _fill.anchorMax = new Vector2(remaining, 1f);
     }
 }

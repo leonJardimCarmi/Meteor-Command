@@ -9,17 +9,19 @@ public class Interceptor : MonoBehaviour
     [SerializeField] private float _trailWidth = 0.6f;
 
     private TrailRenderer _trail;
+    private Gradient _trailColors;
     private Vector3 _target;
 
     private void Awake()
     {
         _trail = GetComponent<TrailRenderer>();
+        _trailColors = TrailStyle.Smoke();
     }
 
     public void Launch(Vector3 target)
     {
         _target = target;
-        TrailStyle.Apply(_trail, _trailTime, _trailWidth, TrailStyle.Smoke());
+        TrailStyle.Apply(_trail, _trailTime, _trailWidth, _trailColors);
     }
 
     private void Update()
