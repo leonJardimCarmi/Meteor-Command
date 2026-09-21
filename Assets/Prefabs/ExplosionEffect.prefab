@@ -4854,3 +4854,4 @@ MonoBehaviour:
   _speed: 6
   _particleSize: 0.5
   _gravity: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 6d70eaf2f53e43a9bd8a86a03a9997c9, type: 2}

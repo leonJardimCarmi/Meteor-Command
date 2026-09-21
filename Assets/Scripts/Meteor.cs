@@ -22,6 +22,10 @@ public class Meteor : MonoBehaviour
     [SerializeField] private Material _scoutMaterial;
     [SerializeField] private Color _scoutTrailColor = new Color(0.7f, 0.3f, 1f);
 
+    [Header("Trail")]
+    [SerializeField] private float _trailTime = 0.9f;
+    [SerializeField] private float _trailWidthPerSize = 0.45f;
+
     private MeshRenderer _renderer;
     private TrailRenderer _trail;
     private Material _normalMaterial;
@@ -38,8 +42,8 @@ public class Meteor : MonoBehaviour
         _renderer = GetComponent<MeshRenderer>();
         _trail = GetComponent<TrailRenderer>();
         _normalMaterial = _renderer.sharedMaterial;
-        _normalTrail = _trail.colorGradient;
-        _scoutTrail = CreateFadingGradient(_scoutTrailColor);
+        _normalTrail = TrailStyle.Flame();
+        _scoutTrail = TrailStyle.Glow(_scoutTrailColor);
     }
 
     public void Launch(Vector3 direction, float speed, MeteorType type, int immuneBlastId = 0)
@@ -96,17 +100,7 @@ public class Meteor : MonoBehaviour
         bool isScout = type == MeteorType.Scout;
 
         _renderer.sharedMaterial = isScout && _scoutMaterial != null ? _scoutMaterial : _normalMaterial;
-        _trail.colorGradient = isScout ? _scoutTrail : _normalTrail;
-        _trail.Clear();
-    }
-
-    private Gradient CreateFadingGradient(Color color)
-    {
-        Gradient gradient = new Gradient();
-        gradient.SetKeys(
-            new[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 1f) },
-            new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(0f, 1f) });
-        return gradient;
+        TrailStyle.Apply(_trail, _trailTime, _trailWidthPerSize * transform.localScale.x, isScout ? _scoutTrail : _normalTrail);
     }
 
     private void Move()

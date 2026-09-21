@@ -5,12 +5,21 @@ public class Interceptor : MonoBehaviour
     public static event System.Action<Vector3> Arrived;
 
     [SerializeField] private float _speed = 30f;
+    [SerializeField] private float _trailTime = 0.8f;
+    [SerializeField] private float _trailWidth = 0.6f;
 
+    private TrailRenderer _trail;
     private Vector3 _target;
+
+    private void Awake()
+    {
+        _trail = GetComponent<TrailRenderer>();
+    }
 
     public void Launch(Vector3 target)
     {
         _target = target;
+        TrailStyle.Apply(_trail, _trailTime, _trailWidth, TrailStyle.Smoke());
     }
 
     private void Update()

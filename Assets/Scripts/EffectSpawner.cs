@@ -28,17 +28,17 @@ public class EffectSpawner : MonoBehaviour
 
     private void OnMeteorDestroyed(Vector3 position, float size)
     {
-        Spawn(position, _destroyedColor, size);
+        Spawn(position, _destroyedColor, size, true);
     }
 
     private void OnMeteorImpacted(Vector3 position, float size)
     {
-        Spawn(position, _impactColor, size * _impactSizeMultiplier);
+        Spawn(position, _impactColor, size * _impactSizeMultiplier, true);
     }
 
     private void OnInterceptorArrived(Vector3 position)
     {
-        Spawn(position, _blastColor, _blastSize);
+        Spawn(position, _blastColor, _blastSize, false);
     }
 
     private void OnKillScored(Vector3 position, int points, int killNumber)
@@ -52,7 +52,7 @@ public class EffectSpawner : MonoBehaviour
         popup.GetComponent<ScorePopup>().Show(points, killNumber);
     }
 
-    private void Spawn(Vector3 position, Color color, float size)
+    private void Spawn(Vector3 position, Color color, float size, bool isFiery)
     {
         if (!PoolManager.Instance.HasPool(PoolType.Effect))
         {
@@ -60,6 +60,6 @@ public class EffectSpawner : MonoBehaviour
         }
 
         GameObject effect = PoolManager.Instance.Get(PoolType.Effect, position, Quaternion.identity);
-        effect.GetComponent<ExplosionEffect>().Play(color, size);
+        effect.GetComponent<ExplosionEffect>().Play(color, size, isFiery);
     }
 }
