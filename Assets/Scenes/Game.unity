@@ -245,8 +245,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &204030844
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,8 +2138,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &615225536
 GameObject:
   m_ObjectHideFlags: 0
@@ -3182,8 +3190,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &942029004
 GameObject:
   m_ObjectHideFlags: 0
@@ -5026,8 +5038,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &1378563980
 GameObject:
   m_ObjectHideFlags: 0
@@ -6163,8 +6179,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &2013253944
 GameObject:
   m_ObjectHideFlags: 0
@@ -6421,8 +6441,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::City
   _rubbleMaterial: {fileID: 2100000, guid: 91d2df9dea3b1134e9d264ec44e90c39, type: 2}
-  _rubbleHeight: 0.4
+  _rubbleMesh: {fileID: 0}
+  _sinkHeight: 0.9
   _collapseSeconds: 0.4
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
+  _smokeSeconds: 14
+  _smokeHeight: 0.4
 --- !u!1 &2142715301
 GameObject:
   m_ObjectHideFlags: 0
