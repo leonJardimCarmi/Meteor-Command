@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PlayerAim : MonoBehaviour
 {
     [SerializeField] private Battery _battery;
 
+    private readonly List<RaycastResult> _hits = new List<RaycastResult>();
     private Camera _camera;
     private Plane _playPlane;
     private bool _isWaveIntro;
@@ -45,11 +49,27 @@ public class PlayerAim : MonoBehaviour
         _isWaveIntro = false;
     }
 
-    // The HUD has no buttons during play, and the menu panels only exist outside of it, so the game state
-    // alone decides whether a click may fire. Checking the pointer against UI text would swallow clicks.
     private bool CanFire()
     {
-        return GameManager.Instance.IsPlaying && !_isWaveIntro;
+        return GameManager.Instance.IsPlaying && !_isWaveIntro && !IsPointerOverButton();
+    }
+
+    // Only buttons swallow a click, so pressing Pause cannot also spend a shot. The HUD text sits under
+    // the pointer at times too, and it must never block a shot.
+    private bool IsPointerOverButton()
+    {
+        PointerEventData pointer = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
+        EventSystem.current.RaycastAll(pointer, _hits);
+
+        foreach (RaycastResult hit in _hits)
+        {
+            if (hit.gameObject.GetComponentInParent<Selectable>() != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void HandleClick()

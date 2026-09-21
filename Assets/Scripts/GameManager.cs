@@ -6,6 +6,7 @@ public enum GameState
 {
     Menu,
     Playing,
+    Paused,
     GameOver
 }
 
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour
 {
     public static event Action GameStarted;
     public static event Action GameOver;
+    public static event Action GamePaused;
+    public static event Action GameResumed;
     public static event Action<int> ScoreChanged;
     public static event Action<Vector3, int, int> KillScored;
 
@@ -39,6 +42,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        SetPaused(false);
     }
 
     private void OnEnable()
@@ -61,10 +65,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+    }
+
     public void StartGame()
     {
         State = GameState.Playing;
         GameStarted?.Invoke();
+    }
+
+    public void Pause()
+    {
+        if (State != GameState.Playing)
+        {
+            return;
+        }
+
+        State = GameState.Paused;
+        SetPaused(true);
+        GamePaused?.Invoke();
+    }
+
+    public void Resume()
+    {
+        if (State != GameState.Paused)
+        {
+            return;
+        }
+
+        State = GameState.Playing;
+        SetPaused(false);
+        GameResumed?.Invoke();
     }
 
     public void Restart()
@@ -105,9 +141,29 @@ public class GameManager : MonoBehaviour
         _battery.Refill(_ammoPerWave);
     }
 
+    private void TogglePause()
+    {
+        if (State == GameState.Playing)
+        {
+            Pause();
+        }
+        else
+        {
+            Resume();
+        }
+    }
+
+    // Freezes or unfreezes time and audio together, so a pause is really a pause.
+    private void SetPaused(bool paused)
+    {
+        Time.timeScale = paused ? 0f : 1f;
+        AudioListener.pause = paused;
+    }
+
     private void ReloadScene(bool skipMenu)
     {
         _skipMenu = skipMenu;
+        SetPaused(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
