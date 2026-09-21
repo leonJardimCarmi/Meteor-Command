@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum MeteorType
+{
+    Small,
+    Large,
+    Scout
+}
+
 public class Meteor : MonoBehaviour
 {
     public static event System.Action<Vector3, float> Destroyed;
@@ -9,18 +16,40 @@ public class Meteor : MonoBehaviour
     [SerializeField] private float _smallScale = 0.5f;
     [SerializeField] private float _fragmentSpreadAngle = 25f;
 
+    [Header("Scout")]
+    [SerializeField] private float _scoutScale = 1f;
+    [SerializeField] private float _scoutSpeedMultiplier = 2f;
+    [SerializeField] private Material _scoutMaterial;
+    [SerializeField] private Color _scoutTrailColor = new Color(0.7f, 0.3f, 1f);
+
+    private MeshRenderer _renderer;
+    private TrailRenderer _trail;
+    private Material _normalMaterial;
+    private Gradient _normalTrail;
+    private Gradient _scoutTrail;
+
     private Vector3 _direction;
     private float _speed;
-    private bool _isLarge;
+    private MeteorType _type;
     private int _immuneBlastId;
 
-    public void Launch(Vector3 direction, float speed, bool isLarge, int immuneBlastId = 0)
+    private void Awake()
+    {
+        _renderer = GetComponent<MeshRenderer>();
+        _trail = GetComponent<TrailRenderer>();
+        _normalMaterial = _renderer.sharedMaterial;
+        _normalTrail = _trail.colorGradient;
+        _scoutTrail = CreateFadingGradient(_scoutTrailColor);
+    }
+
+    public void Launch(Vector3 direction, float speed, MeteorType type, int immuneBlastId = 0)
     {
         _direction = direction.normalized;
-        _speed = speed;
-        _isLarge = isLarge;
+        _type = type;
+        _speed = type == MeteorType.Scout ? speed * _scoutSpeedMultiplier : speed;
         _immuneBlastId = immuneBlastId;
-        transform.localScale = Vector3.one * (isLarge ? _largeScale : _smallScale);
+        transform.localScale = Vector3.one * ScaleOf(type);
+        ApplyLook(type);
     }
 
     public bool Kill(int blastId)
@@ -30,7 +59,7 @@ public class Meteor : MonoBehaviour
             return false;
         }
 
-        if (_isLarge)
+        if (_type == MeteorType.Large)
         {
             SpawnFragment(_fragmentSpreadAngle, blastId);
             SpawnFragment(-_fragmentSpreadAngle, blastId);
@@ -49,6 +78,35 @@ public class Meteor : MonoBehaviour
         {
             HitGround();
         }
+    }
+
+    private float ScaleOf(MeteorType type)
+    {
+        return type switch
+        {
+            MeteorType.Large => _largeScale,
+            MeteorType.Scout => _scoutScale,
+            _ => _smallScale
+        };
+    }
+
+    // A scout gets its own material and trail colour, so it is recognised at a glance.
+    private void ApplyLook(MeteorType type)
+    {
+        bool isScout = type == MeteorType.Scout;
+
+        _renderer.sharedMaterial = isScout && _scoutMaterial != null ? _scoutMaterial : _normalMaterial;
+        _trail.colorGradient = isScout ? _scoutTrail : _normalTrail;
+        _trail.Clear();
+    }
+
+    private Gradient CreateFadingGradient(Color color)
+    {
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 1f) },
+            new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(0f, 1f) });
+        return gradient;
     }
 
     private void Move()
@@ -73,6 +131,6 @@ public class Meteor : MonoBehaviour
     {
         Vector3 direction = Quaternion.Euler(0f, 0f, angle) * _direction;
         GameObject fragment = PoolManager.Instance.Get(PoolType.Meteor, transform.position, Quaternion.identity);
-        fragment.GetComponent<Meteor>().Launch(direction, _speed, false, blastId);
+        fragment.GetComponent<Meteor>().Launch(direction, _speed, MeteorType.Small, blastId);
     }
 }

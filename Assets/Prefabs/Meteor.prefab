@@ -129,6 +129,10 @@ MonoBehaviour:
   _largeScale: 4
   _smallScale: 2
   _fragmentSpreadAngle: 25
+  _scoutScale: 1
+  _scoutSpeedMultiplier: 2
+  _scoutMaterial: {fileID: 2100000, guid: 28ab666ae6ee2914984a7d5a761adb90, type: 2}
+  _scoutTrailColor: {r: 0.7, g: 0.3, b: 1, a: 1}
 --- !u!96 &4017495469858477314
 TrailRenderer:
   serializedVersion: 4

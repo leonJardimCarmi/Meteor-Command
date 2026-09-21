@@ -22,6 +22,12 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float _largeChancePerWave = 0.1f;
     [SerializeField] [Range(0f, 1f)] private float _largeChanceCap = 0.6f;
 
+    [Header("Scout meteors")]
+    [SerializeField] private int _firstScoutWave = 4;
+    [SerializeField] [Range(0f, 1f)] private float _scoutChanceBase = 0.1f;
+    [SerializeField] [Range(0f, 1f)] private float _scoutChancePerWave = 0.05f;
+    [SerializeField] [Range(0f, 1f)] private float _scoutChanceCap = 0.3f;
+
     [Header("Area")]
     [SerializeField] private float _spawnHeight = 28f;
     [SerializeField] private float _spawnRangeX = 18f;
@@ -44,6 +50,20 @@ public class WaveSpawner : MonoBehaviour
 
             float chance = _largeChanceBase + _largeChancePerWave * (_wave - _firstLargeWave);
             return Mathf.Min(chance, _largeChanceCap);
+        }
+    }
+
+    private float ScoutChance
+    {
+        get
+        {
+            if (_wave < _firstScoutWave)
+            {
+                return 0f;
+            }
+
+            float chance = _scoutChanceBase + _scoutChancePerWave * (_wave - _firstScoutWave);
+            return Mathf.Min(chance, _scoutChanceCap);
         }
     }
 
@@ -98,10 +118,21 @@ public class WaveSpawner : MonoBehaviour
     {
         Vector3 start = new Vector3(Random.Range(-_spawnRangeX, _spawnRangeX), _spawnHeight, 0f);
         Vector3 target = new Vector3(Random.Range(-_targetRangeX, _targetRangeX), 0f, 0f);
-        bool isLarge = Random.value < LargeChance;
 
         GameObject meteor = PoolManager.Instance.Get(PoolType.Meteor, start, Quaternion.identity);
-        meteor.GetComponent<Meteor>().Launch(target - start, MeteorSpeed, isLarge);
+        meteor.GetComponent<Meteor>().Launch(target - start, MeteorSpeed, PickType());
+    }
+
+    private MeteorType PickType()
+    {
+        float roll = Random.value;
+
+        if (roll < ScoutChance)
+        {
+            return MeteorType.Scout;
+        }
+
+        return roll < ScoutChance + LargeChance ? MeteorType.Large : MeteorType.Small;
     }
 
     private void StopSpawning()
