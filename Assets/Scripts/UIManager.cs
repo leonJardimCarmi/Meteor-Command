@@ -63,23 +63,23 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _menuPanel.SetActive(!GameManager.Instance.IsPlaying);
-        _menuBestLabel.text = $"Best: {GameManager.Instance.HighScore}";
+        _menuBestLabel.text = $"Best: {GameManager.Instance.HighScore:N0}";
     }
 
     private void ShowScore(int score)
     {
-        _scoreLabel.text = $"Score: {score}";
+        _scoreLabel.text = score.ToString("N0");
     }
 
     private void ShowAmmo(int ammo)
     {
-        _ammoLabel.text = $"Ammo: {ammo} / {GameManager.Instance.AmmoPerWave}";
+        _ammoLabel.text = $"{ammo} / {GameManager.Instance.AmmoPerWave}";
         _ammoLabel.color = ammo < _lowAmmo ? _lowAmmoColor : _normalAmmoColor;
     }
 
     private void ShowWave(int wave)
     {
-        _waveLabel.text = $"Wave {wave}";
+        _waveLabel.text = $"WAVE {wave}";
     }
 
     private void HideMenu()
@@ -89,8 +89,8 @@ public class UIManager : MonoBehaviour
 
     private void ShowGameOver()
     {
-        _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score}";
-        _gameOverBestLabel.text = GameManager.Instance.IsNewHighScore ? "NEW BEST!" : $"Best: {GameManager.Instance.HighScore}";
+        _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score:N0}";
+        _gameOverBestLabel.text = GameManager.Instance.IsNewHighScore ? "NEW BEST!" : $"Best: {GameManager.Instance.HighScore:N0}";
         _gameOverPanel.SetActive(true);
         StartCoroutine(UnlockGameOverButtons());
     }
