@@ -2611,13 +2611,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   _volume: 0.6
-  _launch: {fileID: 0}
-  _blast: {fileID: 0}
+  _maxClipSeconds: 2
+  _launch: {fileID: 8300000, guid: b7517bf40cfc71546bf57899e2ba5a5b, type: 3}
+  _blast: {fileID: 8300000, guid: a06e224672f60514caa746630a6e0749, type: 3}
   _kill: {fileID: 0}
-  _impact: {fileID: 0}
-  _cityLost: {fileID: 0}
-  _waveStart: {fileID: 0}
-  _gameOver: {fileID: 0}
+  _impact: {fileID: 8300000, guid: e2c0b63aa9da31945aabb1fdadcadcec, type: 3}
+  _cityLost: {fileID: 8300000, guid: c02377aae89c4214a88fd4cd0f677472, type: 3}
+  _waveStart: {fileID: 8300000, guid: 3a6db70660edf964280d941a578d8a0c, type: 3}
+  _gameStart: {fileID: 0}
+  _gameOver: {fileID: 8300000, guid: 27c987d1d3749b04d8abd00528923bf7, type: 3}
+  _music: {fileID: 8300000, guid: 5fd079fe74f0837469a2f335313d9c13, type: 3}
+  _musicVolume: 0.743
 --- !u!82 &1258195523
 AudioSource:
   m_ObjectHideFlags: 0

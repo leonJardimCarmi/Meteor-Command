@@ -35,7 +35,7 @@ public class AudioManager : MonoBehaviour
     private void OnEnable()
     {
         Battery.Fired += PlayLaunch;
-        Blast.Detonated += PlayBlast;
+        Interceptor.Arrived += PlayBlast;
         Meteor.Destroyed += PlayKill;
         Meteor.Impacted += PlayImpact;
         City.Destroyed += PlayCityLost;
@@ -47,7 +47,7 @@ public class AudioManager : MonoBehaviour
     private void OnDisable()
     {
         Battery.Fired -= PlayLaunch;
-        Blast.Detonated -= PlayBlast;
+        Interceptor.Arrived -= PlayBlast;
         Meteor.Destroyed -= PlayKill;
         Meteor.Impacted -= PlayImpact;
         City.Destroyed -= PlayCityLost;
@@ -70,12 +70,18 @@ public class AudioManager : MonoBehaviour
         _cityLost = Prepare(_cityLost, SfxSynth.CityLost);
         _waveStart = Prepare(_waveStart, SfxSynth.WaveStart);
         _gameStart = Prepare(_gameStart, SfxSynth.WaveStart);
-        _gameOver = Prepare(_gameOver, SfxSynth.GameOver);
+        _gameOver = Prepare(_gameOver, SfxSynth.GameOver, capLength: false);
     }
 
-    private AudioClip Prepare(AudioClip assigned, System.Func<AudioClip> synthesise)
+    private AudioClip Prepare(AudioClip assigned, System.Func<AudioClip> synthesise, bool capLength = true)
     {
-        return assigned != null ? AudioTrim.Prepare(assigned, _maxClipSeconds) : synthesise();
+        if (assigned == null)
+        {
+            return synthesise();
+        }
+
+        float maxSeconds = capLength ? _maxClipSeconds : assigned.length;
+        return AudioTrim.Prepare(assigned, maxSeconds);
     }
 
     private void StartMusic()
