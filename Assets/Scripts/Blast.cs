@@ -13,6 +13,7 @@ public class Blast : MonoBehaviour
     private int _kills;
 
     public int Id { get; private set; }
+    public float Radius => _radius;
 
     private void Awake()
     {
