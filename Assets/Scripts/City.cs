@@ -11,6 +11,9 @@ public class City : MonoBehaviour
 
     public static event Action Destroyed;
 
+    [Header("Building")]
+    [SerializeField] private Mesh _buildingMesh;
+
     [Header("Collapse")]
     [SerializeField] private Material _rubbleMaterial;
     [SerializeField] private Mesh _rubbleMesh;
@@ -43,6 +46,13 @@ public class City : MonoBehaviour
         {
             _smoke = SmokePlume.Create(transform, _smokeMaterial);
         }
+    }
+
+    // Gives the city its building. A model in the Building Mesh field is used as it is. Without one the city gets
+    // a tower built in code, and every style is a different skyline.
+    public void SetStyle(int style)
+    {
+        _meshFilter.sharedMesh = _buildingMesh != null ? _buildingMesh : BuildingMesh.Style(style);
     }
 
     public void Collapse()

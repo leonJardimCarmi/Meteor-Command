@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 // Builds a pile of rubble in code, as a stand-in for a real rubble model: broken walls and a broken
@@ -63,30 +62,29 @@ public static class RubbleMesh
     private static Mesh Build()
     {
         System.Random random = new System.Random(Seed);
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
+        FlatMeshBuilder builder = new FlatMeshBuilder();
 
         foreach (Piece piece in Standing)
         {
-            AddPiece(vertices, triangles, piece);
+            AddPiece(builder, piece);
         }
 
         for (int i = 0; i < ChunkCount; i++)
         {
-            AddPiece(vertices, triangles, RandomChunk(random));
+            AddPiece(builder, RandomChunk(random));
         }
 
         for (int i = 0; i < SlabCount; i++)
         {
-            AddPiece(vertices, triangles, RandomSlab(random));
+            AddPiece(builder, RandomSlab(random));
         }
 
         for (int i = 0; i < DebrisCount; i++)
         {
-            AddPiece(vertices, triangles, RandomDebris(random));
+            AddPiece(builder, RandomDebris(random));
         }
 
-        return FlatMesh.Build("Rubble", vertices, triangles);
+        return builder.ToMesh("Rubble");
     }
 
     // A small block lying in the pile, turned and tilted at random, with a slightly broken top.
@@ -136,12 +134,13 @@ public static class RubbleMesh
         return min + (float)random.NextDouble() * (max - min);
     }
 
-    // A box standing on the floor. The rotation turns and leans it around its base. The underside is never
-    // seen, so it is left out. The corners are numbered around the box: front left, front right, back right,
-    // back left (the camera looks along +Z, so +Z is the back).
-    private static void AddPiece(List<Vector3> vertices, List<int> triangles, Piece piece)
+    // A box standing on the floor, where the building stood. The rotation turns and leans it around its base.
+    // The underside is never seen, so it is left out. The corners are numbered around the box: front left,
+    // front right, back right, back left (the camera looks along +Z, so +Z is the back).
+    private static void AddPiece(FlatMeshBuilder builder, Piece piece)
     {
         Quaternion rotation = Quaternion.Euler(piece.Angles);
+        Vector3 floorPoint = piece.FloorPoint + Vector3.forward * BuildingMesh.DepthShift;
         Vector3[] bottom = new Vector3[4];
         Vector3[] top = new Vector3[4];
 
@@ -150,19 +149,19 @@ public static class RubbleMesh
             float x = (corner == 1 || corner == 2 ? 0.5f : -0.5f) * piece.Size.x;
             float z = (corner >= 2 ? 0.5f : -0.5f) * piece.Size.z;
 
-            bottom[corner] = piece.FloorPoint + rotation * new Vector3(x, 0f, z);
-            top[corner] = piece.FloorPoint + rotation * new Vector3(x, piece.Size.y - piece.TopDrop[corner], z);
+            bottom[corner] = floorPoint + rotation * new Vector3(x, 0f, z);
+            top[corner] = floorPoint + rotation * new Vector3(x, piece.Size.y - piece.TopDrop[corner], z);
         }
 
-        Vector3 center = piece.FloorPoint + rotation * new Vector3(0f, piece.Size.y * 0.5f, 0f);
-        FlatMesh.AddQuad(vertices, triangles, top[0], top[1], top[2], top[3], rotation * Vector3.up);
+        Vector3 center = floorPoint + rotation * new Vector3(0f, piece.Size.y * 0.5f, 0f);
+        builder.AddQuad(top[0], top[1], top[2], top[3], rotation * Vector3.up);
 
         for (int side = 0; side < 4; side++)
         {
             int next = (side + 1) % 4;
             Vector3 outward = (bottom[side] + bottom[next] + top[side] + top[next]) / 4f - center;
 
-            FlatMesh.AddQuad(vertices, triangles, bottom[side], bottom[next], top[next], top[side], outward);
+            builder.AddQuad(bottom[side], bottom[next], top[next], top[side], outward);
         }
     }
 }

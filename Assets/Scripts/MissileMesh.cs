@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 // Builds a small low poly missile mesh in code: a pointed nose, a round body, a narrower tail and four fins.
@@ -38,16 +37,15 @@ public static class MissileMesh
 
     private static Mesh Build()
     {
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
+        FlatMeshBuilder builder = new FlatMeshBuilder();
 
-        AddBody(vertices, triangles);
-        AddFins(vertices, triangles);
+        AddBody(builder);
+        AddFins(builder);
 
-        return FlatMesh.Build("Missile", vertices, triangles);
+        return builder.ToMesh("Missile");
     }
 
-    private static void AddBody(List<Vector3> vertices, List<int> triangles)
+    private static void AddBody(FlatMeshBuilder builder)
     {
         for (int ring = 0; ring < Profile.Length - 1; ring++)
         {
@@ -59,13 +57,13 @@ public static class MissileMesh
                 Vector3 d = RingPoint(Profile[ring + 1], side);
                 Vector3 outward = (a + b + c + d) / 4f - new Vector3(0f, 0f, (a.z + c.z) / 2f);
 
-                FlatMesh.AddQuad(vertices, triangles, a, b, c, d, outward);
+                builder.AddQuad(a, b, c, d, outward);
             }
         }
     }
 
     // Four flat fins around the tail. Each is drawn from both sides, so it is visible from any angle.
-    private static void AddFins(List<Vector3> vertices, List<int> triangles)
+    private static void AddFins(FlatMeshBuilder builder)
     {
         for (int fin = 0; fin < 4; fin++)
         {
@@ -76,8 +74,8 @@ public static class MissileMesh
             Vector3 rootBack = radial * 0.15f + new Vector3(0f, 0f, -0.78f);
             Vector3 tip = radial * FinSpan + new Vector3(0f, 0f, -0.82f);
 
-            FlatMesh.AddTriangle(vertices, triangles, rootFront, rootBack, tip, sideways);
-            FlatMesh.AddTriangle(vertices, triangles, rootFront, rootBack, tip, -sideways);
+            builder.AddTriangle(rootFront, rootBack, tip, sideways);
+            builder.AddTriangle(rootFront, rootBack, tip, -sideways);
         }
     }
 

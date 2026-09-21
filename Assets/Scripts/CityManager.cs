@@ -14,6 +14,14 @@ public class CityManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        for (int i = 0; i < _cities.Length; i++)
+        {
+            _cities[i].SetStyle(i);
+        }
+    }
+
     public bool IsCityAlive(int index)
     {
         return _cities[index].IsAlive;
