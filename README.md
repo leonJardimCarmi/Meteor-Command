@@ -49,7 +49,7 @@ Assets/
   Audio/       sound effects and music
   Fonts/       Orbitron and Bebas Neue
   Scenes/      Game.unity (the only scene)
-Docs/         the game design document (GDD.md) and its images
+GDD.md         the game design document (images are in the images folder)
 ```
 
 Main scripts: `GameManager` (game states and score), `WaveSpawner` (the waves), `Meteor`, `Interceptor`, `Blast`,
