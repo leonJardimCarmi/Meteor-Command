@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1474391680917658025}
   - component: {fileID: 5764892314138721815}
   m_Layer: 0
-  m_Name: ExplostionEffect
+  m_Name: ExplosionEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4849,8 +4849,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3972f856c1b9c6549bdf2dc536de5c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionEffect
-  _particleCount: 30
+  _particleCount: 50
   _lifetime: 0.7
-  _speed: 5
-  _particleSize: 0.4
+  _speed: 6
+  _particleSize: 0.5
   _gravity: 0.4
