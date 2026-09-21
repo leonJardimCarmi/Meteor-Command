@@ -47,15 +47,17 @@ public class WaveSpawner : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.GameStarted += BeginWaves;
         GameManager.GameOver += StopSpawning;
     }
 
     private void OnDisable()
     {
+        GameManager.GameStarted -= BeginWaves;
         GameManager.GameOver -= StopSpawning;
     }
 
-    private void Start()
+    private void BeginWaves()
     {
         StartCoroutine(RunWaves());
     }

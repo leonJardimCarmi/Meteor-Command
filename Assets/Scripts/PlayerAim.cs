@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerAim : MonoBehaviour
 {
@@ -12,27 +13,18 @@ public class PlayerAim : MonoBehaviour
         _camera = Camera.main;
         _playPlane = new Plane(Vector3.forward, Vector3.zero);
     }
-    private void OnEnable()
-    {
-        GameManager.GameOver += DisableAiming;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.GameOver -= DisableAiming;
-    }
-
-    private void DisableAiming()
-    {
-        enabled = false;
-    }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && CanFire())
         {
             HandleClick();
         }
+    }
+
+    private bool CanFire()
+    {
+        return GameManager.Instance.IsPlaying && !EventSystem.current.IsPointerOverGameObject();
     }
 
     private void HandleClick()

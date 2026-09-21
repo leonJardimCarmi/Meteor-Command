@@ -1,20 +1,33 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public enum GameState
+{
+    Menu,
+    Playing,
+    GameOver
+}
 
 public class GameManager : MonoBehaviour
 {
+    public static event Action GameStarted;
     public static event Action GameOver;
     public static event Action<int> ScoreChanged;
 
     public static GameManager Instance { get; private set; }
+
+    private static bool _skipMenu;
 
     [SerializeField] private Battery _battery;
     [SerializeField] private int _killPoints = 100;
     [SerializeField] private int _ammoPerWave = 20;
     [SerializeField] private int _unusedAmmoBonus = 25;
 
-    public bool IsGameOver { get; private set; }
+    public GameState State { get; private set; } = GameState.Menu;
     public int Score { get; private set; }
+
+    public bool IsPlaying => State == GameState.Playing;
 
     private void Awake()
     {
@@ -34,11 +47,28 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _battery.Refill(_ammoPerWave);
+
+        if (_skipMenu)
+        {
+            StartGame();
+        }
+    }
+
+    public void StartGame()
+    {
+        State = GameState.Playing;
+        GameStarted?.Invoke();
+    }
+
+    public void Restart()
+    {
+        _skipMenu = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void AddKill(int killNumber)
     {
-        if (IsGameOver)
+        if (!IsPlaying)
         {
             return;
         }
@@ -69,7 +99,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        IsGameOver = true;
+        State = GameState.GameOver;
         GameOver?.Invoke();
     }
 }

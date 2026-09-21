@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -10,6 +9,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreLabel;
     [SerializeField] private TextMeshProUGUI _ammoLabel;
     [SerializeField] private TextMeshProUGUI _waveLabel;
+
+    [Header("Main Menu")]
+    [SerializeField] private GameObject _menuPanel;
+    [SerializeField] private Button _playButton;
 
     [Header("Game Over")]
     [SerializeField] private GameObject _gameOverPanel;
@@ -20,9 +23,11 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.ScoreChanged += ShowScore;
+        GameManager.GameStarted += HideMenu;
         GameManager.GameOver += ShowGameOver;
         Battery.AmmoChanged += ShowAmmo;
         WaveSpawner.WaveStarted += ShowWave;
+        _playButton.onClick.AddListener(StartGame);
         _restartButton.onClick.AddListener(Restart);
         ShowScore(0);
     }
@@ -30,10 +35,17 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         GameManager.ScoreChanged -= ShowScore;
+        GameManager.GameStarted -= HideMenu;
         GameManager.GameOver -= ShowGameOver;
         Battery.AmmoChanged -= ShowAmmo;
         WaveSpawner.WaveStarted -= ShowWave;
+        _playButton.onClick.RemoveListener(StartGame);
         _restartButton.onClick.RemoveListener(Restart);
+    }
+
+    private void Start()
+    {
+        _menuPanel.SetActive(!GameManager.Instance.IsPlaying);
     }
 
     private void ShowScore(int score)
@@ -51,6 +63,11 @@ public class UIManager : MonoBehaviour
         _waveLabel.text = $"Wave {wave}";
     }
 
+    private void HideMenu()
+    {
+        _menuPanel.SetActive(false);
+    }
+
     private void ShowGameOver()
     {
         _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score}";
@@ -65,8 +82,13 @@ public class UIManager : MonoBehaviour
         _restartButton.interactable = true;
     }
 
+    private void StartGame()
+    {
+        GameManager.Instance.StartGame();
+    }
+
     private void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameManager.Instance.Restart();
     }
 }
