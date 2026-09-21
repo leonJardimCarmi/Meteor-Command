@@ -116,17 +116,17 @@ public class AudioManager : MonoBehaviour
         Play(_launch);
     }
 
-    private void PlayBlast()
+    private void PlayBlast(Vector3 position)
     {
         Play(_blast);
     }
 
-    private void PlayKill()
+    private void PlayKill(Vector3 position, float size)
     {
         Play(_kill);
     }
 
-    private void PlayImpact()
+    private void PlayImpact(Vector3 position, float size)
     {
         Play(_impact);
     }

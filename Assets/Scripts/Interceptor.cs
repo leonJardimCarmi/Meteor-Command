@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Interceptor : MonoBehaviour
 {
-    public static event System.Action Arrived;
+    public static event System.Action<Vector3> Arrived;
 
     [SerializeField] private float _speed = 30f;
 
@@ -37,6 +37,6 @@ public class Interceptor : MonoBehaviour
     {
         PoolManager.Instance.Get(PoolType.Blast, _target, Quaternion.identity);
         PoolManager.Instance.Release(gameObject);
-        Arrived?.Invoke();
+        Arrived?.Invoke(_target);
     }
 }

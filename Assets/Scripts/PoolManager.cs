@@ -5,7 +5,8 @@ public enum PoolType
 {
     Meteor,
     Interceptor,
-    Blast
+    Blast,
+    Effect
 }
 
 public class PoolManager : MonoBehaviour
@@ -15,9 +16,11 @@ public class PoolManager : MonoBehaviour
     [SerializeField] private GameObject _meteorPrefab;
     [SerializeField] private GameObject _interceptorPrefab;
     [SerializeField] private GameObject _blastPrefab;
+    [SerializeField] private GameObject _effectPrefab;
     [SerializeField] private int _meteorCount = 80;
     [SerializeField] private int _interceptorCount = 25;
     [SerializeField] private int _blastCount = 25;
+    [SerializeField] private int _effectCount = 30;
 
     private readonly Dictionary<PoolType, ObjectPool> _pools = new Dictionary<PoolType, ObjectPool>();
 
@@ -43,10 +46,15 @@ public class PoolManager : MonoBehaviour
             }
         }
     }
-    
+
     public int CountActive(PoolType type)
     {
         return _pools[type].ActiveCount;
+    }
+
+    public bool HasPool(PoolType type)
+    {
+        return _pools.ContainsKey(type);
     }
 
     private void CreatePools()
@@ -54,5 +62,11 @@ public class PoolManager : MonoBehaviour
         _pools[PoolType.Meteor] = new ObjectPool(_meteorPrefab, _meteorCount, transform);
         _pools[PoolType.Interceptor] = new ObjectPool(_interceptorPrefab, _interceptorCount, transform);
         _pools[PoolType.Blast] = new ObjectPool(_blastPrefab, _blastCount, transform);
+
+        // Visual effects are optional: without an effect prefab the game still runs.
+        if (_effectPrefab != null)
+        {
+            _pools[PoolType.Effect] = new ObjectPool(_effectPrefab, _effectCount, transform);
+        }
     }
 }

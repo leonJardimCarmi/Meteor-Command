@@ -276,9 +276,11 @@ MonoBehaviour:
   _meteorPrefab: {fileID: 4372683263077154543, guid: 0f60d9de051786a42a81311155cb0364, type: 3}
   _interceptorPrefab: {fileID: 7004197092538645033, guid: 95c08818f0fd4e24098a7cf0c7098879, type: 3}
   _blastPrefab: {fileID: 6316633372610656790, guid: 17ce188d6c9fe094e931194a835e0b56, type: 3}
+  _effectPrefab: {fileID: 5949129245380672738, guid: 6cc954b71986977478c4fe75b9a90a84, type: 3}
   _meteorCount: 80
   _interceptorCount: 25
   _blastCount: 25
+  _effectCount: 30
 --- !u!4 &204030846
 Transform:
   m_ObjectHideFlags: 0
@@ -286,6 +288,55 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 204030844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &218906309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 218906311}
+  - component: {fileID: 218906310}
+  m_Layer: 0
+  m_Name: EffectSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &218906310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218906309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a73e54ba9a0e2f4ab855bd55f2775ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EffectSpawner
+  _destroyedColor: {r: 1, g: 0.55, b: 0.15, a: 1}
+  _impactColor: {r: 1, g: 0.3, b: 0.1, a: 1}
+  _blastColor: {r: 0.2, g: 0.9, b: 1, a: 1}
+  _impactSizeMultiplier: 1.5
+  _blastSize: 1.5
+--- !u!4 &218906311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218906309}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -3581,3 +3632,4 @@ SceneRoots:
   - {fileID: 1273201687}
   - {fileID: 1430282442}
   - {fileID: 1258195524}
+  - {fileID: 218906311}
