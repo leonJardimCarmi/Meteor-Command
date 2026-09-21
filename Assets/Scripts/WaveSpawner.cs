@@ -5,6 +5,7 @@ public class WaveSpawner : MonoBehaviour
 {
     public static event System.Action<int> WaveStarted;
     public static event System.Action WaveSpawning;
+    public static event System.Action<float> ProgressChanged;
 
     [Header("Wave size")]
     [SerializeField] private int _meteorsBase = 6;
@@ -34,6 +35,8 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _targetRangeX = 16f;
 
     private int _wave;
+    private int _spawnedThisWave;
+    private bool _isWaveActive;
 
     private int MeteorCount => _meteorsBase + _meteorsPerWave * (_wave - 1);
 
@@ -79,6 +82,14 @@ public class WaveSpawner : MonoBehaviour
         GameManager.GameOver -= StopSpawning;
     }
 
+    private void Update()
+    {
+        if (_isWaveActive)
+        {
+            ProgressChanged?.Invoke(RemainingFraction());
+        }
+    }
+
     private void BeginWaves()
     {
         StartCoroutine(RunWaves());
@@ -89,11 +100,15 @@ public class WaveSpawner : MonoBehaviour
         while (true)
         {
             _wave++;
+            _spawnedThisWave = 0;
+            _isWaveActive = true;
             WaveStarted?.Invoke(_wave);
             yield return new WaitForSeconds(_pauseBetweenWaves);
             WaveSpawning?.Invoke();
             yield return StartCoroutine(SpawnWave());
             yield return new WaitUntil(IsSkyEmpty);
+            _isWaveActive = false;
+            ProgressChanged?.Invoke(0f);
             GameManager.Instance.CompleteWave();
         }
     }
@@ -114,8 +129,17 @@ public class WaveSpawner : MonoBehaviour
         return PoolManager.Instance.CountActive(PoolType.Meteor) == 0;
     }
 
+    // The share of the wave still to deal with: meteors not yet spawned plus meteors still in the sky.
+    private float RemainingFraction()
+    {
+        int notSpawned = MeteorCount - _spawnedThisWave;
+        int inSky = PoolManager.Instance.CountActive(PoolType.Meteor);
+        return Mathf.Clamp01((float)(notSpawned + inSky) / MeteorCount);
+    }
+
     private void SpawnMeteor()
     {
+        _spawnedThisWave++;
         Vector3 start = new Vector3(Random.Range(-_spawnRangeX, _spawnRangeX), _spawnHeight, 0f);
         Vector3 target = new Vector3(Random.Range(-_targetRangeX, _targetRangeX), 0f, 0f);
 
