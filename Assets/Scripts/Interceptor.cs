@@ -5,8 +5,8 @@ public class Interceptor : MonoBehaviour
     public static event System.Action<Vector3> Arrived;
 
     [SerializeField] private float _speed = 30f;
-    [SerializeField] private float _trailTime = 0.8f;
-    [SerializeField] private float _trailWidth = 0.6f;
+    [SerializeField] private float _trailTime = 1.0f;
+    [SerializeField] private float _trailWidth = 0.55f;
 
     private TrailRenderer _trail;
     private Gradient _trailColors;
@@ -16,11 +16,13 @@ public class Interceptor : MonoBehaviour
     {
         _trail = GetComponent<TrailRenderer>();
         _trailColors = TrailStyle.Smoke();
+        GetComponent<MeshFilter>().sharedMesh = MissileMesh.Shared;
     }
 
     public void Launch(Vector3 target)
     {
         _target = target;
+        FaceTarget();
         TrailStyle.Apply(_trail, _trailTime, _trailWidth, _trailColors);
     }
 
@@ -31,6 +33,17 @@ public class Interceptor : MonoBehaviour
         if (HasArrived())
         {
             Arrive();
+        }
+    }
+
+    // The missile flies nose first toward the point it was fired at.
+    private void FaceTarget()
+    {
+        Vector3 direction = _target - transform.position;
+
+        if (direction.sqrMagnitude > 0.0001f)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
         }
     }
 

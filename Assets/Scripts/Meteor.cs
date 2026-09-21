@@ -23,14 +23,16 @@ public class Meteor : MonoBehaviour
     [SerializeField] private Color _scoutTrailColor = new Color(0.7f, 0.3f, 1f);
 
     [Header("Trail")]
-    [SerializeField] private float _trailTime = 0.9f;
-    [SerializeField] private float _trailWidthPerSize = 0.45f;
+    [SerializeField] private float _trailTime = 0.55f;
+    [SerializeField] private float _trailWidthPerSize = 0.38f;
+    [SerializeField] private Material _smokeMaterial;
 
     private MeshRenderer _renderer;
     private TrailRenderer _trail;
     private Material _normalMaterial;
     private Gradient _normalTrail;
     private Gradient _scoutTrail;
+    private ParticleSystem _smoke;
 
     private Vector3 _direction;
     private float _speed;
@@ -44,6 +46,11 @@ public class Meteor : MonoBehaviour
         _normalMaterial = _renderer.sharedMaterial;
         _normalTrail = TrailStyle.Flame();
         _scoutTrail = TrailStyle.Glow(_scoutTrailColor);
+
+        if (_smokeMaterial != null)
+        {
+            _smoke = SmokeTrail.Create(transform, _smokeMaterial);
+        }
     }
 
     public void Launch(Vector3 direction, float speed, MeteorType type, int immuneBlastId = 0)
@@ -101,6 +108,11 @@ public class Meteor : MonoBehaviour
 
         _renderer.sharedMaterial = isScout && _scoutMaterial != null ? _scoutMaterial : _normalMaterial;
         TrailStyle.Apply(_trail, _trailTime, _trailWidthPerSize * transform.localScale.x, isScout ? _scoutTrail : _normalTrail);
+
+        if (_smoke != null)
+        {
+            SmokeTrail.Restart(_smoke, transform.localScale.x);
+        }
     }
 
     private void Move()

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// A city building. When it is destroyed it sinks into a low pile of rubble instead of disappearing.
+// A city building. When it is destroyed it sinks into a low pile of rubble, and smoke rises from the ruin.
 public class City : MonoBehaviour
 {
     public static event Action Destroyed;
@@ -10,20 +10,29 @@ public class City : MonoBehaviour
     [SerializeField] private Material _rubbleMaterial;
     [SerializeField] private float _rubbleHeight = 0.4f;
     [SerializeField] private float _collapseSeconds = 0.4f;
+    [SerializeField] private Material _smokeMaterial;
+    [SerializeField] private float _smokeSeconds = 14f;
 
     private MeshRenderer _renderer;
+    private ParticleSystem _smoke;
 
     public bool IsAlive { get; private set; } = true;
 
     private void Awake()
     {
         _renderer = GetComponent<MeshRenderer>();
+
+        if (_smokeMaterial != null)
+        {
+            _smoke = SmokePlume.Create(transform, _smokeMaterial, new Vector3(0f, 0.5f, 0f));
+        }
     }
 
     public void Collapse()
     {
         IsAlive = false;
         StartCoroutine(Crumble());
+        StartCoroutine(Smoulder());
         Destroyed?.Invoke();
     }
 
@@ -43,6 +52,19 @@ public class City : MonoBehaviour
         }
 
         SetHeight(_rubbleHeight);
+    }
+
+    // The ruin smokes for a while, then the smoke stops and the last puffs drift away.
+    private IEnumerator Smoulder()
+    {
+        if (_smoke == null)
+        {
+            yield break;
+        }
+
+        _smoke.Play();
+        yield return new WaitForSeconds(_smokeSeconds);
+        _smoke.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     // The base stays on the ground while the height changes.

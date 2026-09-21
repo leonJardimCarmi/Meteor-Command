@@ -133,6 +133,7 @@ MonoBehaviour:
   _scoutSpeedMultiplier: 2
   _scoutMaterial: {fileID: 2100000, guid: 28ab666ae6ee2914984a7d5a761adb90, type: 2}
   _scoutTrailColor: {r: 0.7, g: 0.3, b: 1, a: 1}
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
 --- !u!96 &4017495469858477314
 TrailRenderer:
   serializedVersion: 4
