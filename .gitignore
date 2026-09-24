@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Unity crash-recovery scene backups
 /[Aa]ssets/_Recovery*
+
+# Rider IDE settings
+.idea/

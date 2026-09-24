@@ -6,7 +6,7 @@ public class Battery : MonoBehaviour
     public static event Action<int> AmmoChanged;
     public static event Action Fired;
 
-    [SerializeField] private Vector3 _launchOffset = new Vector3(0f, 1.5f, 0f);
+    [SerializeField] private Transform _muzzle;
 
     public int Ammo { get; private set; }
 
@@ -32,8 +32,7 @@ public class Battery : MonoBehaviour
 
     private void LaunchInterceptor(Vector3 target)
     {
-        Vector3 launchPosition = transform.position + _launchOffset;
-        GameObject missile = PoolManager.Instance.Get(PoolType.Interceptor, launchPosition, Quaternion.identity);
+        GameObject missile = PoolManager.Instance.Get(PoolType.Interceptor, _muzzle.position, Quaternion.identity);
         missile.GetComponent<Interceptor>().Launch(target);
     }
 }

@@ -16,7 +16,6 @@ public class Interceptor : MonoBehaviour
     {
         _trail = GetComponent<TrailRenderer>();
         _trailColors = TrailStyle.Smoke();
-        GetComponent<MeshFilter>().sharedMesh = MissileMesh.Shared;
     }
 
     public void Launch(Vector3 target)

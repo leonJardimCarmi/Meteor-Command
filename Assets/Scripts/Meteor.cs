@@ -24,7 +24,7 @@ public class Meteor : MonoBehaviour
 
     [Header("Trail")]
     [SerializeField] private float _trailTime = 0.55f;
-    [SerializeField] private float _trailWidthPerSize = 0.38f;
+    [SerializeField] private float _trailWidthPerSize = 0.2f;
     [SerializeField] private Material _smokeMaterial;
 
     private MeshRenderer _renderer;
