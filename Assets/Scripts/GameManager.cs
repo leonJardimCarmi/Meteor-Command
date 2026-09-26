@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Battery _battery;
     [SerializeField] private int _killPoints = 100;
-    [SerializeField] private int _ammoPerWave = 20;
+    [SerializeField] [Range(0f, 1f)] private float _extraAmmoFraction = 0.25f;
     [SerializeField] private int _unusedAmmoBonus = 25;
 
     public GameState State { get; private set; } = GameState.Menu;
@@ -36,7 +36,10 @@ public class GameManager : MonoBehaviour
     public bool IsNewHighScore { get; private set; }
 
     public bool IsPlaying => State == GameState.Playing;
-    public int AmmoPerWave => _ammoPerWave;
+
+    // How many shots the battery gets for the wave now being armed. Set from the wave's own meteor count
+    // (see OnWaveSizeDetermined), so ammo keeps pace as later waves throw more meteors at once.
+    public int AmmoPerWave { get; private set; }
 
     private void Awake()
     {
@@ -48,17 +51,17 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         City.Destroyed += OnCityDestroyed;
+        WaveSpawner.WaveSizeDetermined += OnWaveSizeDetermined;
     }
 
     private void OnDisable()
     {
         City.Destroyed -= OnCityDestroyed;
+        WaveSpawner.WaveSizeDetermined -= OnWaveSizeDetermined;
     }
 
     private void Start()
     {
-        _battery.Refill(_ammoPerWave);
-
         if (_skipMenu)
         {
             StartGame();
@@ -138,7 +141,14 @@ public class GameManager : MonoBehaviour
     public void CompleteWave()
     {
         AddScore(_battery.Ammo * _unusedAmmoBonus);
-        _battery.Refill(_ammoPerWave);
+    }
+
+    // A wave always brings at least enough shots to clear it, plus a working margin, so a later wave with
+    // more meteors than the old fixed ammo count is never impossible to finish.
+    private void OnWaveSizeDetermined(int meteorCount)
+    {
+        AmmoPerWave = Mathf.CeilToInt(meteorCount * (1f + _extraAmmoFraction));
+        _battery.Refill(AmmoPerWave);
     }
 
     private void TogglePause()

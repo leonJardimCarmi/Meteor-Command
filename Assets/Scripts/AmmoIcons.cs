@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// A row of small missiles, one per shot in a wave. Spent shots fade out from the right.
-// The scene holds a single template icon; the others are copies of it, laid out by a layout group.
+// A row of small missiles, one per shot in a wave. Spent shots fade out from the right. Ammo per wave now
+// grows as the waves do (see GameManager), so the row grows with it instead of being built once at a fixed
+// size. The scene holds a single template icon; the others are copies of it, laid out by a layout group.
 public class AmmoIcons : MonoBehaviour
 {
     [SerializeField] private Image _template;
@@ -11,7 +12,6 @@ public class AmmoIcons : MonoBehaviour
     [SerializeField] private Color _spentColor = new Color(0.25f, 0.3f, 0.4f, 0.6f);
 
     private readonly List<Image> _icons = new List<Image>();
-    private int _ammo;
 
     private void OnEnable()
     {
@@ -34,27 +34,26 @@ public class AmmoIcons : MonoBehaviour
             return;
         }
 
-        CreateIcons();
-        Refresh(_ammo);
-    }
-
-    private void CreateIcons()
-    {
         _icons.Add(_template);
-
-        for (int i = 1; i < GameManager.Instance.AmmoPerWave; i++)
-        {
-            _icons.Add(Instantiate(_template, transform));
-        }
     }
 
     private void Refresh(int ammo)
     {
-        _ammo = ammo;
+        GrowTo(GameManager.Instance.AmmoPerWave);
 
         for (int i = 0; i < _icons.Count; i++)
         {
             _icons[i].color = i < ammo ? _readyColor : _spentColor;
+        }
+    }
+
+    // Adds icons until there are enough for the wave's ammo. Waves never need fewer than the one before, so
+    // icons are only ever added, never removed.
+    private void GrowTo(int count)
+    {
+        while (_icons.Count < count)
+        {
+            _icons.Add(Instantiate(_template, transform));
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     public static event System.Action<int> WaveStarted;
+    public static event System.Action<int> WaveSizeDetermined;
     public static event System.Action WaveSpawning;
     public static event System.Action<float> ProgressChanged;
 
@@ -103,6 +104,7 @@ public class WaveSpawner : MonoBehaviour
             _spawnedThisWave = 0;
             _isWaveActive = true;
             WaveStarted?.Invoke(_wave);
+            WaveSizeDetermined?.Invoke(MeteorCount);
             yield return new WaitForSeconds(_pauseBetweenWaves);
             WaveSpawning?.Invoke();
             yield return StartCoroutine(SpawnWave());
