@@ -67,5 +67,4 @@ public class Blast : MonoBehaviour
     {
         transform.localScale = Vector3.one * (radius * 2f);
     }
-
 }

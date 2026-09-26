@@ -41,7 +41,9 @@ public class Meteor : MonoBehaviour
 
     private void Awake()
     {
-        _renderer = GetComponent<MeshRenderer>();
+        // The rock mesh sits on a child object, offset so its centre lines up with this transform. That way
+        // the tumble (RandomMeteorSpin) can spin the rock freely without dragging the fire trail off centre.
+        _renderer = GetComponentInChildren<MeshRenderer>();
         _trail = GetComponent<TrailRenderer>();
         _normalMaterial = _renderer.sharedMaterial;
         _normalTrail = TrailStyle.Flame();
