@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 3D |
 | **Orientation & reference resolution** | Landscape, 1920 x 1080 reference |
 | **Expected session length** | 2 to 10 minutes |
-| **Document version** | v2.0, 2026-09-06 |
+| **Document version** | v2.1, 2026-09-26 |
 
 ---
 
@@ -64,7 +64,7 @@ stateDiagram-v2
 - **Tier mix.** Waves 1 and 2 are all Small. From wave 3 each meteor has a `largeMeteorChance` of being Large, starting at 25 percent, rising 10 points per wave, capped at 60.
 - **Scoring.** Each meteor is worth 100, and a blast destroying *N* of them scores `100 x N x N`, so two kills is 400 and three is 900. This is the whole reason to wait for a cluster.
 - **Failure and running dry.** A meteor reaching `Y = 0` destroys the nearest city within `cityKillRadius` and is removed, otherwise it is harmless. The run ends when the sixth city dies. If ammo hits zero mid wave the battery stops firing and the rest land where they land: survivable, not an instant loss. The counter turns red below five shots.
-- **Wave clear.** The wave has fully spawned and none are alive. Each unused interceptor awards `+25`, then ammo refills to `ammoPerWave`.
+- **Wave clear.** The wave has fully spawned and none are alive. Each unused interceptor awards `+25`, then ammo refills to that wave's ammo budget (see `extraAmmoFraction` below).
 
 ### Parameters you will need to tune
 
@@ -75,7 +75,7 @@ stateDiagram-v2
 | `meteorSpeedPerWave` | How much faster each wave gets | +0.5 u/s |
 | `blastRadius` | How much sky one shot covers, so how forgiving aiming is and how reachable combos are | 3.0 u |
 | `blastExpand` / `blastHold` / `blastShrink` | The three phases of the blast coroutine | 0.35 / 0.15 / 0.35 s |
-| `ammoPerWave` | Shots per wave, the strategy dial. Lower makes combos mandatory | 20 |
+| `extraAmmoFraction` | Ammo for a wave is that wave's meteor count plus this fraction, rounded up. The strategy dial: lower makes combos mandatory. A fixed shot count stopped working once later waves threw more meteors than it, so this scales with the wave instead | 25% |
 | `meteorsBase` / `meteorsPerWave` | Wave size and its growth | 6 / +3 |
 | `largeMeteorChance` / `largeChancePerWave` / `largeChanceCap` | How the Large to Small mix shifts per wave | 25% / +10% / 60% |
 | `fragmentSpreadAngle` | How far a fragment rotates off its parent. Low values make splits trivially re-combo'd | 25 degrees |
@@ -123,7 +123,7 @@ stateDiagram-v2
 | Battery / launcher | 1 turret mesh | Kenney *Tower Defense Kit* (CC0) | Player structure |
 | Blast sphere | Unity sphere, emissive transparent URP material | Built in | The detonation volume |
 | Explosion VFX | 1 prefab, recoloured to the night palette | Unity *Particle Pack* (free) | Destruction effect |
-| Ground, mountains, skybox | Flat plane, layered ridges, gradient skybox | Built in and Kenney *Nature Kit* (CC0) | Staging and depth |
+| Ground, sky | Flat plane; one wide night sky picture behind everything | Built in; sky image made with AI image generation (credited in the README) | Staging and depth |
 | SFX launch | 1 clip | Freesound.org (CC0) | Battery fires |
 | SFX blast | 2 clips, alternated | Freesound.org (CC0) | Detonation |
 | SFX ground impact | 1 clip | Freesound.org (CC0) | Meteor hits the ground |
@@ -132,7 +132,7 @@ stateDiagram-v2
 
 **Licence note:** every asset is CC0 or Unity Asset Store free licence, so the build and the public repo ship as they are. Any CC-BY track used is credited in the README. Nothing is taken from image search.
 
-**Technical art rules:** URP Lit for solid meshes, URP Unlit with emission for blasts, trails and lit windows. One directional key light plus a short lived point light per blast, and distance fog for depth between the mountain layers. Real time lighting only, no baking: everything meaningful moves, so a lightmap would bake nothing useful while still costing build time. Target 60 FPS, meshes under 500 triangles.
+**Technical art rules:** URP Lit for solid meshes, URP Unlit with emission for blasts, trails and lit windows. One directional key light plus a short lived point light per blast. Real time lighting only, no baking: everything meaningful moves, so a lightmap would bake nothing useful while still costing build time. Target 60 FPS, meshes under 500 triangles.
 
 ---
 
@@ -209,7 +209,6 @@ graph TD
 - [ ] Emissive materials with URP Bloom, so blasts, trails and city windows glow. Highest visual payoff per hour in the project
 - [ ] Explosion VFX from the free Unity Particle Pack, recoloured to the night palette
 - [ ] Camera shake on ground impact
-- [ ] Layered low poly mountains with distance fog
 - [ ] Full audio pass: launch, blast, impact, city lost, wave start, menu clicks, music
 - [ ] Floating score pop up showing each combo value
 - [ ] Persistent high score via `PlayerPrefs`
@@ -235,3 +234,4 @@ graph TD
 | v0.1 | 2026-08-15 | Initial outline |
 | v1.0 | 2026-09-01 | First full draft as *Missile Command 3D* |
 | v2.0 | 2026-09-06 | Reworked as *Meteor Command* against the course template: splitting meteors, combo scoring and a per wave ammo economy. Set to two meteor tiers after three did not fit the ammo budget. Scope trimmed to three panels |
+| v2.1 | 2026-09-26 | Ammo per wave (`extraAmmoFraction`) now scales with that wave's meteor count instead of a fixed 20, since later waves outgrew the fixed number. Dropped the layered mountains and distance fog: the sky is one AI-generated picture instead, and there is no longer any layered geometry for fog to read against |
