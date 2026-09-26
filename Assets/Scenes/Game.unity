@@ -15,9 +15,9 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogColor: {r: 0.101960786, g: 0.13725491, b: 0.2509804, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.02
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.101960786, g: 0.13725491, b: 0.2509804, a: 1}
@@ -694,7 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _battery: {fileID: 694698916}
   _killPoints: 100
-  _ammoPerWave: 20
+  _extraAmmoFraction: 0.25
   _unusedAmmoBonus: 25
 --- !u!4 &266960889
 Transform:
@@ -1348,6 +1348,7 @@ MonoBehaviour:
   _template: {fileID: 615225538}
   _readyColor: {r: 0.6, g: 0.85, b: 1, a: 1}
   _spentColor: {r: 0.25, g: 0.3, b: 0.4, a: 0.6}
+  _maxIcons: 50
 --- !u!1 &346704207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +2984,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615225536}
   m_CullTransparentMesh: 1
+--- !u!1 &619948271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 619948272}
+  m_Layer: 0
+  m_Name: MuzzlePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &619948272
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619948271}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 694698915}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &642588023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a4c0d54b143092545acae0e9d830cfb4, type: 3}
@@ -3270,40 +3302,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43ddc33c5127141428825108bddf34c1, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Battery
   _muzzle: {fileID: 619948272}
---- !u!1 &619948271
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 619948272}
-  m_Layer: 0
-  m_Name: MuzzlePoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &619948272
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619948271}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 694698915}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &694698917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6440,12 +6441,17 @@ MonoBehaviour:
   _maxClipSeconds: 2
   _launch: {fileID: 8300000, guid: b7517bf40cfc71546bf57899e2ba5a5b, type: 3}
   _blast: {fileID: 8300000, guid: a06e224672f60514caa746630a6e0749, type: 3}
+  _blastVolume: 0.6
+  _blastAlt: {fileID: 8300000, guid: 4182aab142d5b8c498dea84de6a07a63, type: 3}
+  _blastAltVolume: 1.6
   _kill: {fileID: 0}
   _impact: {fileID: 8300000, guid: e2c0b63aa9da31945aabb1fdadcadcec, type: 3}
   _cityLost: {fileID: 8300000, guid: c02377aae89c4214a88fd4cd0f677472, type: 3}
   _waveStart: {fileID: 8300000, guid: 3a6db70660edf964280d941a578d8a0c, type: 3}
   _gameStart: {fileID: 8300000, guid: ff752777152922a4384ece4d5199df35, type: 3}
   _gameOver: {fileID: 8300000, guid: 27c987d1d3749b04d8abd00528923bf7, type: 3}
+  _menuClick: {fileID: 8300000, guid: 02951cf939bb784429fc12fea5702a75, type: 3}
+  _menuClickVolume: 1.8
   _music: {fileID: 8300000, guid: 5fd079fe74f0837469a2f335313d9c13, type: 3}
   _musicVolume: 0.743
 --- !u!82 &1258195523
