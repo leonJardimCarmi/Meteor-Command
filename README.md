@@ -9,7 +9,7 @@ By **Ilan** and **Leon**.
 ## How to play
 
 - **Left mouse click** - fire an interceptor at that point in the sky.
-- Every wave you get **20 shots**, so don't waste them. Some meteors land on empty ground and are harmless.
+- Each wave gives you just enough shots to clear it, with a little extra - the number grows as the waves do, so don't waste them. Some meteors land on empty ground and are harmless.
 - **Large meteors split** into two smaller ones when you hit them.
 - Destroying **several meteors with one explosion** gives a big combo bonus (2 meteors = 400 points, 3 = 900, ...).
 - Shots you did not use at the end of a wave give a **bonus**, and then your ammo is refilled.
