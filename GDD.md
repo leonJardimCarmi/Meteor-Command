@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 3D |
 | **Orientation & reference resolution** | Landscape, 1920 x 1080 reference |
 | **Expected session length** | 2 to 10 minutes |
-| **Document version** | v2.1, 2026-09-26 |
+| **Document version** | v2.2, 2026-09-26 |
 
 ---
 
@@ -193,26 +193,26 @@ graph TD
 
 ### 8.1 MVP, the game is not a game without these
 
-- [ ] One battery, six cities, flat arena, all gameplay on the Z = 0 plane
-- [ ] Click, interceptor travels, expanding blast destroys meteors inside it
-- [ ] Meteors fall to ground targets, destroy a city on impact, run ends when the last city dies
-- [ ] Large meteors split into two Small when destroyed
-- [ ] Limited ammo per wave plus the unused ammo bonus
-- [ ] Combo scoring for multiple kills in one blast
-- [ ] Object pooled meteors, interceptors and blasts
-- [ ] Waves growing in count, speed and Large share
-- [ ] All three panels with a working restart
+- [x] One battery, six cities, flat arena, all gameplay on the Z = 0 plane
+- [x] Click, interceptor travels, expanding blast destroys meteors inside it
+- [x] Meteors fall to ground targets, destroy a city on impact, run ends when the last city dies
+- [x] Large meteors split into two Small when destroyed
+- [x] Limited ammo per wave plus the unused ammo bonus
+- [x] Combo scoring for multiple kills in one blast
+- [x] Object pooled meteors, interceptors and blasts
+- [x] Waves growing in count, speed and Large share
+- [x] All three panels with a working restart
 
 ### 8.2 Polish, if the MVP is done and playable
 
-- [ ] Trail Renderer on meteors and interceptors
-- [ ] Emissive materials with URP Bloom, so blasts, trails and city windows glow. Highest visual payoff per hour in the project
-- [ ] Explosion VFX from the free Unity Particle Pack, recoloured to the night palette
-- [ ] Camera shake on ground impact
-- [ ] Full audio pass: launch, blast, impact, city lost, wave start, menu clicks, music
-- [ ] Floating score pop up showing each combo value
-- [ ] Persistent high score via `PlayerPrefs`
-- [ ] A fast scout meteor at double speed that does not split
+- [x] Trail Renderer on meteors and interceptors
+- [x] Emissive materials with URP Bloom, so blasts, trails and city windows glow. Highest visual payoff per hour in the project
+- [x] Explosion VFX, recoloured to the night palette. Built as layered particle systems in code instead of the free Unity Particle Pack, so every layer (sparks, ring, fireball, smoke, embers) is tuned to this game exactly
+- [x] Camera shake on ground impact
+- [x] Full audio pass: launch, blast, impact, city lost, wave start, menu clicks, music
+- [x] Floating score pop up showing each combo value
+- [x] Persistent high score via `PlayerPrefs`
+- [x] A fast scout meteor at double speed that does not split
 
 ### 8.3 Explicitly out of scope, we are **not** building these
 
@@ -235,3 +235,4 @@ graph TD
 | v1.0 | 2026-09-01 | First full draft as *Missile Command 3D* |
 | v2.0 | 2026-09-06 | Reworked as *Meteor Command* against the course template: splitting meteors, combo scoring and a per wave ammo economy. Set to two meteor tiers after three did not fit the ammo budget. Scope trimmed to three panels |
 | v2.1 | 2026-09-26 | Ammo per wave (`extraAmmoFraction`) now scales with that wave's meteor count instead of a fixed 20, since later waves outgrew the fixed number. Dropped the layered mountains and distance fog: the sky is one AI-generated picture instead, and there is no longer any layered geometry for fog to read against |
+| v2.2 | 2026-09-26 | Checked off every item in 8.1 and 8.2 against the shipped game, and corrected the explosion VFX line: built as layered particle systems in code, not the Unity Particle Pack. Added `images/reference-missile-command.png` (credited in the README), which the document already linked to |

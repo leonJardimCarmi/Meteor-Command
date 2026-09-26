@@ -60,5 +60,6 @@ Main scripts: `GameManager` (game states and score), `WaveSpawner` (the waves), 
 - **Sound effects and music** from [Pixabay](https://pixabay.com/) by `dennish18`, `dragon-studio`, `freesound_community` and `chrysalyn`.
 - **Fonts**: [Orbitron](https://fonts.google.com/specimen/Orbitron) and [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue), both under the SIL Open Font License (license files are in `Assets/Fonts/Licenses`).
 - **Background image** generated with ChatGPT image generation.
+- **`images/reference-missile-command.png`** (used in the GDD only, for comparison) is a photo by Brett L. from San Francisco, California, USA, licensed [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:MISSILE_COMMAND_(2392548208).jpg).
 - We used **Claude** (an AI assistant) to help with the code and to learn Unity while we built the game.
 - The original idea comes from the arcade game *Missile Command* (Atari, 1980).
