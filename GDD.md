@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 3D |
 | **Orientation & reference resolution** | Landscape, 1920 x 1080 reference |
 | **Expected session length** | 2 to 10 minutes |
-| **Document version** | v2.2, 2026-09-26 |
+| **Document version** | v2.3, 2026-09-28 |
 
 ---
 
@@ -51,6 +51,9 @@ stateDiagram-v2
     Playing --> GameOver: last city destroyed
     GameOver --> WaveIntro: Restart (after 0.5 s lockout)
     GameOver --> MainMenu: Menu
+    Playing --> Paused: Escape or Pause button
+    Paused --> Playing: Resume
+    Paused --> MainMenu: Main Menu
 ```
 
 **The arena.** One invisible vertical plane at Z = 0. Ground runs X = -20 to +20 at Y = 0, with six cities at fixed X positions, three either side of a single battery at X = 0. Meteors enter at Y = 28 across X = -18 to +18. The third dimension is for meshes, lighting and depth only, which is why aiming is never ambiguous in a 3D scene. This is the most important structural decision in the game.
@@ -93,11 +96,13 @@ stateDiagram-v2
 |---|---|---|---|
 | Fire interceptor at cursor | Left Mouse Button | Not supported | Not supported |
 | Confirm menu button | Left Mouse Button | Not supported | Not supported |
+| Pause / resume | `Escape`, or the Pause button in the HUD | Not supported | Not supported |
 
 - Input is read on press in `Update` with the legacy `Input` class (`Input.GetMouseButtonDown(0)`), converted to a world point via `Camera.main.ScreenPointToRay` against the play plane, then handed to `Battery`. The New Input System package is not used: three inputs, one line each, and its `Active Input Handling` setting is a known source of silent runtime breakage.
 - If the cursor is over a UI element (`EventSystem.current.IsPointerOverGameObject()`) the click is consumed by the UI and never reaches `Battery`, so clicking Restart on the Game Over screen cannot also spend a shot in the run it starts.
 - On Game Over a `0.5 s` lockout runs before Restart accepts a click, so the click that killed you cannot skip past your score.
 - Clicks are ignored during the wave intro banner and the wave clear bonus, so no ammo is wasted before the player can see the sky.
+- Pausing freezes time and audio together (`Time.timeScale = 0`, `AudioListener.pause`), so a paused wave is really frozen. Clicking the Pause button never also spends a shot, since buttons swallow the click.
 
 ---
 
@@ -108,6 +113,7 @@ stateDiagram-v2
 1. **Main Menu.** Title `METEOR COMMAND`, buttons `Play` and `Quit`, a `Best: 12,400` line from the stored high score, and three lines of rules printed directly on the menu: click to fire, large meteors split, destroying several at once is worth far more.
 2. **HUD during play.** Score top centre, `WAVE 3` and a progress bar top left, ammo as `18 / 20` bottom centre under the battery, and six city icons bottom left that grey out as cities die.
 3. **Game Over.** `GAME OVER`, final score, a `NEW BEST!` line when the record is beaten, buttons `Restart` and `Main Menu`.
+4. **Pause.** Opened with `Escape` or the Pause button in the HUD. `PAUSED`, buttons `Resume` and `Main Menu`. Only reachable during play.
 
 - **Deliberately absent from the HUD:** no minimap, no timer, no combo meter. The score pop up at each blast already shows the multiplier when it matters.
 - **Canvas setup:** Screen Space Overlay, CanvasScaler on **Scale With Screen Size**, reference 1920 x 1080, Match = 0.5.
@@ -118,19 +124,22 @@ stateDiagram-v2
 
 | Asset | Variants / frames | Source & licence | Use |
 |---|---|---|---|
-| Meteor mesh | 1 rock mesh, 2 tiers at scale 1.0 and 0.5 | Kenney *Nature Kit* (CC0) | The falling threat |
-| City building | 6 low poly blocks plus 1 rubble variant | Kenney *City Kit (Commercial)* (CC0) | Destructible targets |
-| Battery / launcher | 1 turret mesh | Kenney *Tower Defense Kit* (CC0) | Player structure |
+| Meteor mesh | 2 rock meshes, 2 tiers at scale 1.0 and 0.5, random spin, red tint while falling | Kenney *Nature Kit* (CC0) | The falling threat |
+| City building | 6 building shapes plus a rubble pile, all built in code (`BuildingMesh`, `RubbleMesh`) | Our own code | Destructible targets |
+| City surroundings | Roads, a stop sign, a street lamp and trees | Kenney *City Kit Roads* and *Nature Kit* (CC0) | Staging around the cities |
+| Battery / launcher | 1 turret that turns to aim (`TurretAim`) | Kenney *Blaster Kit* and *Space Kit* (CC0) | Player structure |
+| Interceptor | 1 missile prefab (`MissileVisual`) assembled from rocket parts | Kenney *Space Kit* (CC0) | The shot in flight |
 | Blast sphere | Unity sphere, emissive transparent URP material | Built in | The detonation volume |
-| Explosion VFX | 1 prefab, recoloured to the night palette | Unity *Particle Pack* (free) | Destruction effect |
+| Explosion VFX | Layered particle systems (sparks, ring, fireball, smoke, embers), recoloured to the night palette | Our own code (`ExplosionEffect`) | Destruction effect |
 | Ground, sky | Flat plane; one wide night sky picture behind everything | Built in; sky image made with AI image generation (credited in the README) | Staging and depth |
-| SFX launch | 1 clip | Freesound.org (CC0) | Battery fires |
-| SFX blast | 2 clips, alternated | Freesound.org (CC0) | Detonation |
-| SFX ground impact | 1 clip | Freesound.org (CC0) | Meteor hits the ground |
-| SFX city lost | 1 clip | Freesound.org (CC0) | A city is destroyed |
-| Music | 1 loop | Freesound.org (CC0) | Menu and play |
+| SFX launch | 1 clip | Pixabay (Pixabay Content License) | Battery fires |
+| SFX blast | 2 clips, alternated | Pixabay (Pixabay Content License) | Detonation |
+| SFX ground impact | 1 clip | Pixabay (Pixabay Content License) | Meteor hits the ground |
+| SFX city lost | 1 clip | Pixabay (Pixabay Content License) | A city is destroyed |
+| Music | 1 loop | Pixabay (Pixabay Content License) | Menu and play |
+| Fonts | Orbitron, Bebas Neue | Google Fonts (SIL Open Font License) | All UI text |
 
-**Licence note:** every asset is CC0 or Unity Asset Store free licence, so the build and the public repo ship as they are. Any CC-BY track used is credited in the README. Nothing is taken from image search.
+**Licence note:** every asset is CC0, the Pixabay Content License, the SIL Open Font License, or our own work, so the build and the public repo ship as they are. Every source is credited in the README. Nothing is taken from image search.
 
 **Technical art rules:** URP Lit for solid meshes, URP Unlit with emission for blasts, trails and lit windows. One directional key light plus a short lived point light per blast. Real time lighting only, no baking: everything meaningful moves, so a lightmap would bake nothing useful while still costing build time. Target 60 FPS, meshes under 500 triangles.
 
@@ -179,6 +188,7 @@ graph TD
 | `UIManager` | Updates score, wave, ammo and city icons, shows and hides the three panels. |
 | `AudioManager` | Plays one shot SFX so no caller needs its own `AudioSource`. |
 | `CameraShake` | A coroutine that offsets the camera on impact, then restores it exactly. |
+| `PauseMenu` | The HUD Pause button and the pause panel with Resume and Main Menu. `Escape` goes through `GameManager`, so both routes pause the same way. |
 
 ### The course features we are implementing
 
@@ -212,6 +222,7 @@ graph TD
 - [x] Full audio pass: launch, blast, impact, city lost, wave start, menu clicks, music
 - [x] Floating score pop up showing each combo value
 - [x] Persistent high score via `PlayerPrefs`
+- [x] A pause screen (`Escape` or the HUD button) with Resume and Main Menu
 - [x] A fast scout meteor at double speed that does not split
 
 ### 8.3 Explicitly out of scope, we are **not** building these
@@ -236,3 +247,4 @@ graph TD
 | v2.0 | 2026-09-06 | Reworked as *Meteor Command* against the course template: splitting meteors, combo scoring and a per wave ammo economy. Set to two meteor tiers after three did not fit the ammo budget. Scope trimmed to three panels |
 | v2.1 | 2026-09-26 | Ammo per wave (`extraAmmoFraction`) now scales with that wave's meteor count instead of a fixed 20, since later waves outgrew the fixed number. Dropped the layered mountains and distance fog: the sky is one AI-generated picture instead, and there is no longer any layered geometry for fog to read against |
 | v2.2 | 2026-09-26 | Checked off every item in 8.1 and 8.2 against the shipped game, and corrected the explosion VFX line: built as layered particle systems in code, not the Unity Particle Pack. Added `images/reference-missile-command.png` (credited in the README), which the document already linked to |
+| v2.3 | 2026-09-28 | Brought the asset table in section 6 in line with the shipped game: Kenney models for the meteors, turret, missile and city surroundings, buildings and explosion VFX built in code, sound and music from Pixabay, and the two fonts. Documented the pause screen, which the game already had: state diagram, controls, screens, scripts and scope |

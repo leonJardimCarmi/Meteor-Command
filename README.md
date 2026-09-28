@@ -45,6 +45,7 @@ Assets/
   Scripts/     all the code (one small script per job)
   Prefabs/     meteor, interceptor, explosion, effects
   Materials/   glowing materials, city and ground
+  models/      Kenney 3D models: turret, missile, meteor rocks, roads and trees
   Art/         background, icons, textures
   Audio/       sound effects and music
   Fonts/       Orbitron and Bebas Neue
@@ -57,6 +58,7 @@ Main scripts: `GameManager` (game states and score), `WaveSpawner` (the waves), 
 
 ## Credits
 
+- **3D models** by [Kenney](https://kenney.nl/) (CC0): the turret (Blaster Kit), the missile parts (Space Kit), the meteor rocks and trees (Nature Kit), and the roads, signs and street lamp (City Kit Roads). The city buildings themselves are built in code.
 - **Sound effects and music** from [Pixabay](https://pixabay.com/) by `dennish18`, `dragon-studio`, `freesound_community` and `chrysalyn`.
 - **Fonts**: [Orbitron](https://fonts.google.com/specimen/Orbitron) and [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue), both under the SIL Open Font License (license files are in `Assets/Fonts/Licenses`).
 - **Background image** generated with ChatGPT image generation.
