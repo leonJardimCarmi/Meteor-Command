@@ -50,7 +50,7 @@ By **Ilan** and **Leon**.
 
 1. Install **Unity 6000.3.20f1** (Unity 6.3 LTS) with the Universal Render Pipeline.
 2. Clone the repository and open the folder with Unity Hub.
-3. Open the scene `Assets/Scenes/Game.unity` and press **Play**.
+3. The project opens the game scene for you. If you see an empty scene, double click `Assets/Scenes/Game.unity` in the Project window. Then press **Play**.
 
 The game is made for PC (Windows) and is played only with the mouse.
 
