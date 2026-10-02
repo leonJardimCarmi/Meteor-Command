@@ -9,6 +9,18 @@ public class CityManager : MonoBehaviour
 
     public int CityCount => _cities.Length;
 
+    // Shows how close to each city a meteor has to land to hit it, in the Scene view.
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0.4f, 0.9f, 1f);
+
+        foreach (City city in _cities)
+        {
+            Vector3 ground = new Vector3(city.transform.position.x, 0f, city.transform.position.z);
+            Gizmos.DrawLine(ground + Vector3.left * _hitRadius, ground + Vector3.right * _hitRadius);
+        }
+    }
+
     private void Awake()
     {
         Instance = this;

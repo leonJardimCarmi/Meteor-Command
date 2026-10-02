@@ -39,6 +39,17 @@ public class WaveSpawner : MonoBehaviour
     private int _spawnedThisWave;
     private bool _isWaveActive;
 
+    // Shows where meteors come from (orange) and the stretch of ground they aim at (red) in the Scene view, so
+    // the area can be judged by eye.
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1f, 0.5f, 0.2f);
+        Gizmos.DrawLine(new Vector3(-_spawnRangeX, _spawnHeight, 0f), new Vector3(_spawnRangeX, _spawnHeight, 0f));
+
+        Gizmos.color = new Color(1f, 0.2f, 0.2f);
+        Gizmos.DrawLine(new Vector3(-_targetRangeX, 0f, 0f), new Vector3(_targetRangeX, 0f, 0f));
+    }
+
     private int MeteorCount => _meteorsBase + _meteorsPerWave * (_wave - 1);
 
     private float MeteorSpeed => _meteorSpeedBase + _meteorSpeedPerWave * (_wave - 1);
