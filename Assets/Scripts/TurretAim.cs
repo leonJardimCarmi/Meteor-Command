@@ -1,23 +1,17 @@
 using UnityEngine;
 
-
+// Turns the turret toward the mouse, within a limited sideways and upward angle.
 [ExecuteAlways]
 public class TurretAim : MonoBehaviour
 {
-    [SerializeField]
-    private float maxYawAngle = 60f; 
+    private static readonly Plane PlayPlane = new Plane(Vector3.forward, Vector3.zero);
 
-    [SerializeField]
-    private float minPitchAngle = 10f; 
-
-    [SerializeField]
-    private float maxPitchAngle = 80f; 
-
-    [SerializeField]
-    private float rotationSpeed = 10f; 
+    [SerializeField] private float _maxYawAngle = 60f;
+    [SerializeField] private float _minPitchAngle = 10f;
+    [SerializeField] private float _maxPitchAngle = 80f;
+    [SerializeField] private float _rotationSpeed = 10f;
 
     private Camera _mainCamera;
-    private static readonly Plane PlayPlane = new Plane(Vector3.forward, Vector3.zero);
 
     private void Awake()
     {
@@ -28,7 +22,7 @@ public class TurretAim : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            return; 
+            return;
         }
 
         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -45,10 +39,10 @@ public class TurretAim : MonoBehaviour
         float yaw = Vector3.SignedAngle(Vector3.forward, new Vector3(toTarget.x, 0f, toTarget.z), Vector3.up);
         float pitch = Mathf.Atan2(toTarget.y, horizontalDistance) * Mathf.Rad2Deg;
 
-        float clampedYaw = Mathf.Clamp(yaw, -maxYawAngle, maxYawAngle);
-        float clampedPitch = Mathf.Clamp(pitch, minPitchAngle, maxPitchAngle);
-        
+        float clampedYaw = Mathf.Clamp(yaw, -_maxYawAngle, _maxYawAngle);
+        float clampedPitch = Mathf.Clamp(pitch, _minPitchAngle, _maxPitchAngle);
+
         Quaternion targetLocalRotation = Quaternion.Euler(-clampedPitch, clampedYaw, 0f);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRotation, rotationSpeed * Time.deltaTime);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRotation, _rotationSpeed * Time.deltaTime);
     }
 }
