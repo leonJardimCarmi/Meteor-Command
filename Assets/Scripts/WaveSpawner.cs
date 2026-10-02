@@ -34,6 +34,8 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _spawnHeight = 28f;
     [SerializeField] private float _spawnRangeX = 18f;
     [SerializeField] private float _targetRangeX = 16f;
+    [SerializeField] [Range(0f, 1f)] private float _aimAtCityChance = 0.7f;
+    [SerializeField] private float _cityAimSpread = 1.5f;
 
     private int _wave;
     private int _spawnedThisWave;
@@ -154,10 +156,22 @@ public class WaveSpawner : MonoBehaviour
     {
         _spawnedThisWave++;
         Vector3 start = new Vector3(Random.Range(-_spawnRangeX, _spawnRangeX), _spawnHeight, 0f);
-        Vector3 target = new Vector3(Random.Range(-_targetRangeX, _targetRangeX), 0f, 0f);
+        Vector3 target = new Vector3(PickTargetX(), 0f, 0f);
 
         GameObject meteor = PoolManager.Instance.Get(PoolType.Meteor, start, Quaternion.identity);
         meteor.GetComponent<Meteor>().Launch(target - start, MeteorSpeed, PickType());
+    }
+
+    // Most meteors are aimed at a city that is still standing, so there is always something to defend. The rest
+    // land anywhere along the ground, and many of those are harmless.
+    private float PickTargetX()
+    {
+        if (Random.value < _aimAtCityChance && CityManager.Instance.TryGetRandomCityX(out float cityX))
+        {
+            return cityX + Random.Range(-_cityAimSpread, _cityAimSpread);
+        }
+
+        return Random.Range(-_targetRangeX, _targetRangeX);
     }
 
     private MeteorType PickType()

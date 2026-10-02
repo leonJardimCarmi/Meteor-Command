@@ -34,6 +34,38 @@ public class CityManager : MonoBehaviour
         }
     }
 
+    // The X position of a random city that is still standing, so a meteor can be aimed at it.
+    public bool TryGetRandomCityX(out float x)
+    {
+        int alive = CountAlive();
+        x = 0f;
+
+        if (alive == 0)
+        {
+            return false;
+        }
+
+        int pick = Random.Range(0, alive);
+
+        foreach (City city in _cities)
+        {
+            if (!city.IsAlive)
+            {
+                continue;
+            }
+
+            if (pick == 0)
+            {
+                x = city.transform.position.x;
+                return true;
+            }
+
+            pick--;
+        }
+
+        return false;
+    }
+
     public bool IsCityAlive(int index)
     {
         return _cities[index].IsAlive;
