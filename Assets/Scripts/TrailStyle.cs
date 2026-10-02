@@ -23,11 +23,6 @@ public static class TrailStyle
         return Fading(Color.Lerp(color, Color.white, 0.7f), color, color * 0.4f, new Color(0.15f, 0.12f, 0.2f));
     }
 
-    public static Gradient Smoke()
-    {
-        return Fading(Color.white, new Color(0.6f, 0.85f, 1f), new Color(0.35f, 0.5f, 0.75f), new Color(0.2f, 0.25f, 0.35f));
-    }
-
     private static Gradient Fading(Color head, Color warm, Color cool, Color ash)
     {
         Gradient gradient = new Gradient();

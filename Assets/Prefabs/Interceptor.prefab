@@ -32,7 +32,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6820193746528193740}
+  - {fileID: 8919998397249644182}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &9217196611137379990
@@ -69,6 +69,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interceptor
   _speed: 30
+  _trailTime: 0.3
+  _trailWidth: 0.3
+  _smokeMaterial: {fileID: 2100000, guid: 2aaa63b0f0b04fa8935a45f6e1bb1b8a, type: 2}
 --- !u!96 &2887937868295255090
 TrailRenderer:
   serializedVersion: 4
@@ -187,17 +190,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4029387306422205252}
     m_Modifications:
-    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
+    - target: {fileID: 5140728706418984506, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
+      propertyPath: m_Name
+      value: MissileVisual
       objectReference: {fileID: 0}
     - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
       propertyPath: m_LocalScale.x
@@ -210,6 +205,18 @@ PrefabInstance:
     - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
       propertyPath: m_LocalRotation.w
@@ -239,16 +246,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5140728706418984506, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
-      propertyPath: m_Name
-      value: MissileVisual
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
---- !u!4 &6820193746528193740 stripped
+--- !u!4 &8919998397249644182 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6139186677777383637, guid: 79677ceb914a8014ebff19a550527f87, type: 3}
   m_PrefabInstance: {fileID: 3384726190582736451}
