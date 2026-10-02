@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // Plays a sound for each game event. A clip slot left empty in the Inspector simply stays silent.
@@ -15,11 +16,18 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip _blastAlt;
     [SerializeField] [Range(0f, 2f)] private float _blastAltVolume = 1.6f;
     [SerializeField] private AudioClip _kill;
+    [SerializeField] [Range(0f, 0.5f)] private float _killPitchStep = 0.12f;
     [SerializeField] private AudioClip _impact;
     [SerializeField] private AudioClip _cityLost;
     [SerializeField] private AudioClip _waveStart;
     [SerializeField] private AudioClip _gameStart;
     [SerializeField] private AudioClip _gameOver;
+
+    [Header("Reload (after every shot, while the battery reloads)")]
+    [SerializeField] private AudioClip _reload;
+    [SerializeField] [Range(0f, 2f)] private float _reloadVolume = 1f;
+    [SerializeField] private float _reloadSoundDelay = 0.1f;
+    [SerializeField] private float _reloadClipSeconds = 0.7f;
 
     [Header("Menu click (any click while not playing)")]
     [SerializeField] private AudioClip _menuClick;
@@ -32,6 +40,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource _source;
     private AudioSource _musicSource;
     private AudioSource _menuClickSource;
+    private AudioSource _killSource;
     private bool _nextBlastIsAlt;
 
     private void Awake()
@@ -43,16 +52,21 @@ public class AudioManager : MonoBehaviour
         _menuClickSource = gameObject.AddComponent<AudioSource>();
         _menuClickSource.ignoreListenerPause = true;
 
+        // The kill sound rises in pitch, and a source has one pitch, so it gets a source of its own.
+        _killSource = gameObject.AddComponent<AudioSource>();
+
         PrepareClips();
     }
 
     private void OnEnable()
     {
         Battery.Fired += PlayLaunch;
+        Battery.Fired += PlayReload;
         Interceptor.Arrived += PlayBlast;
-        Meteor.Destroyed += PlayKill;
+        GameManager.KillScored += PlayKill;
         Meteor.Impacted += PlayImpact;
-        City.Destroyed += PlayCityLost;
+        City.Destroyed += PlayLoss;
+        TurretHealth.Hit += PlayLoss;
         WaveSpawner.WaveStarted += PlayWaveStart;
         GameManager.GameStarted += PlayGameStart;
         GameManager.GameOver += PlayGameOver;
@@ -61,10 +75,12 @@ public class AudioManager : MonoBehaviour
     private void OnDisable()
     {
         Battery.Fired -= PlayLaunch;
+        Battery.Fired -= PlayReload;
         Interceptor.Arrived -= PlayBlast;
-        Meteor.Destroyed -= PlayKill;
+        GameManager.KillScored -= PlayKill;
         Meteor.Impacted -= PlayImpact;
-        City.Destroyed -= PlayCityLost;
+        City.Destroyed -= PlayLoss;
+        TurretHealth.Hit -= PlayLoss;
         WaveSpawner.WaveStarted -= PlayWaveStart;
         GameManager.GameStarted -= PlayGameStart;
         GameManager.GameOver -= PlayGameOver;
@@ -91,6 +107,7 @@ public class AudioManager : MonoBehaviour
         _blast = Prepare(_blast);
         _blastAlt = Prepare(_blastAlt);
         _kill = Prepare(_kill);
+        _reload = Prepare(_reload, _reloadClipSeconds);
         _impact = Prepare(_impact);
         _cityLost = Prepare(_cityLost);
         _waveStart = Prepare(_waveStart);
@@ -107,7 +124,12 @@ public class AudioManager : MonoBehaviour
         }
 
         float maxSeconds = capLength ? _maxClipSeconds : assigned.length;
-        return AudioTrim.Prepare(assigned, maxSeconds);
+        return Prepare(assigned, maxSeconds);
+    }
+
+    private AudioClip Prepare(AudioClip assigned, float maxSeconds)
+    {
+        return assigned == null ? null : AudioTrim.Prepare(assigned, maxSeconds);
     }
 
     private void StartMusic()
@@ -174,9 +196,26 @@ public class AudioManager : MonoBehaviour
         _nextBlastIsAlt = !_nextBlastIsAlt;
     }
 
-    private void PlayKill(Vector3 position, float size)
+    // Every further kill in the same blast sounds a little higher, so a combo climbs.
+    private void PlayKill(Vector3 position, int points, int killNumber)
     {
-        Play(_kill);
+        _killSource.pitch = 1f + _killPitchStep * (killNumber - 1);
+        Play(_killSource, _kill, 1f);
+    }
+
+    // The reload sound starts just after the launch, so the two can be told apart.
+    private void PlayReload()
+    {
+        if (_reload != null)
+        {
+            StartCoroutine(PlayReloadAfterDelay());
+        }
+    }
+
+    private IEnumerator PlayReloadAfterDelay()
+    {
+        yield return new WaitForSeconds(_reloadSoundDelay);
+        Play(_reload, _reloadVolume);
     }
 
     private void PlayImpact(Vector3 position, float size)
@@ -184,7 +223,7 @@ public class AudioManager : MonoBehaviour
         Play(_impact);
     }
 
-    private void PlayCityLost()
+    private void PlayLoss()
     {
         Play(_cityLost);
     }
