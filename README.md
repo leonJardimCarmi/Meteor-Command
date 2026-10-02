@@ -6,6 +6,12 @@ and everything inside the explosion is destroyed. Protect the cities as long as 
 
 By **Ilan** and **Leon**.
 
+## Screenshots
+
+| Main menu | During a wave | Start of a wave |
+|---|---|---|
+| ![Main menu](images/screenshot-menu.png) | ![Meteors falling, two cities already in ruins](images/screenshot-gameplay.png) | ![Wave banner, crosshair and HUD](images/screenshot-wave-start.png) |
+
 ## How to play
 
 - **Left mouse click** - fire an interceptor at the crosshair. A ring with an X shows where it will explode.
