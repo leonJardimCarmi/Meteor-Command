@@ -3,8 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // A row of small round lights that show how many hits the turret can still take. They are made in code, one
-// for each hit point, and turn red on the last one. Everything inside this object (the lights and the TURRET
-// label) is shown and hidden together.
+// for each hit point, and turn red on the last one.
 public class TurretHealthIcons : MonoBehaviour
 {
     private const int TextureSize = 64;
@@ -16,33 +15,21 @@ public class TurretHealthIcons : MonoBehaviour
     [SerializeField] private Color _lostColor = new Color(1f, 1f, 1f, 0.15f);
 
     private readonly List<Image> _icons = new List<Image>();
-    private CanvasGroup _group;
     private Sprite _sprite;
 
     private void Awake()
     {
         _sprite = ProceduralSprite.Create(TextureSize, DiscAlpha);
-
-        // Hidden on the main menu, so it does not sit on top of the rules text. It shows when the game starts.
-        _group = gameObject.AddComponent<CanvasGroup>();
-        _group.alpha = 0f;
     }
 
     private void OnEnable()
     {
         TurretHealth.HitPointsChanged += Refresh;
-        GameManager.GameStarted += Show;
     }
 
     private void OnDisable()
     {
         TurretHealth.HitPointsChanged -= Refresh;
-        GameManager.GameStarted -= Show;
-    }
-
-    private void Show()
-    {
-        _group.alpha = 1f;
     }
 
     private void Refresh(int hitPoints, int maxHitPoints)

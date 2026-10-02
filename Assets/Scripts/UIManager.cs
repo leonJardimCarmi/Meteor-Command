@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [Header("HUD")]
+    [SerializeField] private CanvasGroup _hud;
     [SerializeField] private TextMeshProUGUI _scoreLabel;
     [SerializeField] private TextMeshProUGUI _ammoLabel;
     [SerializeField] private TextMeshProUGUI _waveLabel;
@@ -64,6 +65,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _menuPanel.SetActive(!GameManager.Instance.IsPlaying);
+        SetHudVisible(GameManager.Instance.IsPlaying);
         _menuBestLabel.text = $"Best: {GameManager.Instance.HighScore:N0}";
     }
 
@@ -86,6 +88,16 @@ public class UIManager : MonoBehaviour
     private void HideMenu()
     {
         _menuPanel.SetActive(false);
+        SetHudVisible(true);
+    }
+
+    // The HUD is hidden, not switched off, behind the main menu: its parts keep listening for game events, so
+    // they already show the right numbers the moment the game starts.
+    private void SetHudVisible(bool visible)
+    {
+        _hud.alpha = visible ? 1f : 0f;
+        _hud.blocksRaycasts = visible;
+        _hud.interactable = visible;
     }
 
     private void ShowGameOver()
