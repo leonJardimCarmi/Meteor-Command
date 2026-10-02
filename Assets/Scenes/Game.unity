@@ -11189,8 +11189,10 @@ MonoBehaviour:
   _spawnHeight: 28
   _spawnRangeX: 18
   _targetRangeX: 16
-  _aimAtCityChance: 0.7
-  _cityAimSpread: 1.5
+  _turret: {fileID: 694698915}
+  _aimAtCityChance: 0.55
+  _aimAtTurretChance: 0.25
+  _aimSpread: 1.2
 --- !u!4 &2147011486
 Transform:
   m_ObjectHideFlags: 0

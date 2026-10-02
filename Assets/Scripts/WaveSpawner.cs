@@ -34,8 +34,10 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private float _spawnHeight = 28f;
     [SerializeField] private float _spawnRangeX = 18f;
     [SerializeField] private float _targetRangeX = 16f;
-    [SerializeField] [Range(0f, 1f)] private float _aimAtCityChance = 0.7f;
-    [SerializeField] private float _cityAimSpread = 1.5f;
+    [SerializeField] private Transform _turret;
+    [SerializeField] [Range(0f, 1f)] private float _aimAtCityChance = 0.55f;
+    [SerializeField] [Range(0f, 1f)] private float _aimAtTurretChance = 0.25f;
+    [SerializeField] private float _aimSpread = 1.2f;
 
     private int _wave;
     private int _spawnedThisWave;
@@ -162,13 +164,22 @@ public class WaveSpawner : MonoBehaviour
         meteor.GetComponent<Meteor>().Launch(target - start, MeteorSpeed, PickType());
     }
 
-    // Most meteors are aimed at a city that is still standing, so there is always something to defend. The rest
-    // land anywhere along the ground, and many of those are harmless.
+    // Most meteors are aimed at something that can be damaged: a city that is still standing, or the turret. The
+    // rest land anywhere along the ground, and many of those are harmless.
     private float PickTargetX()
     {
-        if (Random.value < _aimAtCityChance && CityManager.Instance.TryGetRandomCityX(out float cityX))
+        float roll = Random.value;
+
+        if (roll < _aimAtCityChance)
         {
-            return cityX + Random.Range(-_cityAimSpread, _cityAimSpread);
+            if (CityManager.Instance.TryGetRandomCityX(out float cityX))
+            {
+                return cityX + Random.Range(-_aimSpread, _aimSpread);
+            }
+        }
+        else if (roll < _aimAtCityChance + _aimAtTurretChance)
+        {
+            return _turret.position.x + Random.Range(-_aimSpread, _aimSpread);
         }
 
         return Random.Range(-_targetRangeX, _targetRangeX);
