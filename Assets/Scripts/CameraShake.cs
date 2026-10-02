@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-// Shakes the camera when a meteor hits the ground or a city is lost. The strongest shake wins,
+// Shakes the camera when a meteor hits the ground, or when a city is lost or the turret is hit (the same strong
+// shake for both). The strongest shake wins,
 // so overlapping hits do not add up or cancel each other.
 public class CameraShake : MonoBehaviour
 {
@@ -22,13 +23,15 @@ public class CameraShake : MonoBehaviour
     private void OnEnable()
     {
         Meteor.Impacted += OnMeteorImpacted;
-        City.Destroyed += OnCityDestroyed;
+        City.Destroyed += OnBigLoss;
+        TurretHealth.Hit += OnBigLoss;
     }
 
     private void OnDisable()
     {
         Meteor.Impacted -= OnMeteorImpacted;
-        City.Destroyed -= OnCityDestroyed;
+        City.Destroyed -= OnBigLoss;
+        TurretHealth.Hit -= OnBigLoss;
     }
 
     private void OnMeteorImpacted(Vector3 position, float size)
@@ -36,7 +39,7 @@ public class CameraShake : MonoBehaviour
         Shake(size * _impactStrengthPerSize);
     }
 
-    private void OnCityDestroyed()
+    private void OnBigLoss()
     {
         Shake(_cityLostStrength);
     }

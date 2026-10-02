@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over")]
     [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private TextMeshProUGUI _gameOverReasonLabel;
     [SerializeField] private TextMeshProUGUI _finalScoreLabel;
     [SerializeField] private TextMeshProUGUI _gameOverBestLabel;
     [SerializeField] private Button _restartButton;
@@ -89,6 +90,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowGameOver()
     {
+        _gameOverReasonLabel.text = GameManager.Instance.EndReason == GameOverReason.TurretDestroyed ? "TURRET DESTROYED" : "ALL CITIES LOST";
         _finalScoreLabel.text = $"Final score: {GameManager.Instance.Score:N0}";
         _gameOverBestLabel.text = GameManager.Instance.IsNewHighScore ? "NEW BEST!" : $"Best: {GameManager.Instance.HighScore:N0}";
         _gameOverPanel.SetActive(true);

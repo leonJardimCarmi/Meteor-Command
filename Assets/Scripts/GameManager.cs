@@ -10,6 +10,12 @@ public enum GameState
     GameOver
 }
 
+public enum GameOverReason
+{
+    AllCitiesLost,
+    TurretDestroyed
+}
+
 public class GameManager : MonoBehaviour
 {
     public static event Action GameStarted;
@@ -34,6 +40,7 @@ public class GameManager : MonoBehaviour
     public int Score { get; private set; }
     public int HighScore { get; private set; }
     public bool IsNewHighScore { get; private set; }
+    public GameOverReason EndReason { get; private set; }
 
     public bool IsPlaying => State == GameState.Playing;
 
@@ -51,12 +58,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         City.Destroyed += OnCityDestroyed;
+        TurretHealth.Destroyed += OnTurretDestroyed;
         WaveSpawner.WaveSizeDetermined += OnWaveSizeDetermined;
     }
 
     private void OnDisable()
     {
         City.Destroyed -= OnCityDestroyed;
+        TurretHealth.Destroyed -= OnTurretDestroyed;
         WaveSpawner.WaveSizeDetermined -= OnWaveSizeDetermined;
     }
 
@@ -138,9 +147,11 @@ public class GameManager : MonoBehaviour
         KillScored?.Invoke(position, points, killNumber);
     }
 
+    // Clearing a wave pays out the unused ammo and repairs one hit on the turret.
     public void CompleteWave()
     {
         AddScore(_battery.Ammo * _unusedAmmoBonus);
+        _battery.Repair();
     }
 
     // A wave always brings at least enough shots to clear it, plus a working margin, so a later wave with
@@ -187,12 +198,23 @@ public class GameManager : MonoBehaviour
     {
         if (CityManager.Instance.CountAlive() == 0)
         {
-            EndGame();
+            EndGame(GameOverReason.AllCitiesLost);
         }
     }
 
-    private void EndGame()
+    private void OnTurretDestroyed()
     {
+        EndGame(GameOverReason.TurretDestroyed);
+    }
+
+    private void EndGame(GameOverReason reason)
+    {
+        if (State == GameState.GameOver)
+        {
+            return;
+        }
+
+        EndReason = reason;
         State = GameState.GameOver;
         SaveHighScore();
         GameOver?.Invoke();
