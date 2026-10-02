@@ -179,7 +179,9 @@ public class WaveSpawner : MonoBehaviour
         }
         else if (roll < _aimAtCityChance + _aimAtTurretChance)
         {
-            return _turret.position.x + Random.Range(-_aimSpread, _aimSpread);
+            // Without a turret in the Inspector it is taken to stand in the middle, so the waves never stop.
+            float turretX = _turret != null ? _turret.position.x : 0f;
+            return turretX + Random.Range(-_aimSpread, _aimSpread);
         }
 
         return Random.Range(-_targetRangeX, _targetRangeX);
