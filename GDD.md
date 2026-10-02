@@ -64,7 +64,7 @@ stateDiagram-v2
 
 - A click raycasts against the play plane for a target point. The battery fires only if `ammo > 0`, and ammo is spent on launch rather than detonation, so a shot aimed at a meteor something else destroys first is still gone.
 - An interceptor travels from the battery at a constant `30 u/s`, passes through everything on the way, and detonates only on arrival. The blast is then a coroutine: expand to `3.0 u` over `0.35 s`, hold `0.15 s`, shrink to zero over `0.35 s`, destroying meteors on trigger enter for the whole `0.85 s`.
-- **Spawning and triage.** Each meteor spawns at `Y = 28` at a random X, gets a random ground target X, and travels straight to it. Many head for open ground and are harmless. Only the ones ending near a city need destroying, and reading which those are is what the limited ammo exists to force.
+- **Spawning and triage.** Each meteor spawns at `Y = 28` at a random X, gets a ground target X, and travels straight to it. The target is a random point on the ground for 30 percent of them and a standing city for the other 70 percent (see `GDD_BONUS.md`). The random ones often head for open ground and are harmless. Only the ones ending near a city need destroying, and reading which those are is what the limited ammo exists to force.
 - **Splitting.** Two tiers only. A destroyed **Large** returns to the pool and spawns two **Small**, each rotated off the parent direction by `fragmentSpreadAngle`. A **Small** just dies. Fragments score independently and can be caught in one blast.
 - **Tier mix.** Waves 1 and 2 are all Small. From wave 3 each meteor has a `largeMeteorChance` of being Large, starting at 25 percent, rising 10 points per wave, capped at 60.
 - **Scoring.** Each meteor is worth 100, and a blast destroying *N* of them scores `100 x N x N`, so two kills is 400 and three is 900. This is the whole reason to wait for a cluster.
@@ -112,7 +112,7 @@ stateDiagram-v2
 
 ![Screen layouts: main menu, HUD, game over](images/screens-layout.png)
 
-1. **Main Menu.** Title `METEOR COMMAND`, buttons `Play` and `Quit`, a `Best: 12,400` line from the stored high score, and three lines of rules printed directly on the menu: click to fire, large meteors split, destroying several at once is worth far more.
+1. **Main Menu.** Title `METEOR COMMAND`, buttons `Play` and `Quit`, a `Best: 12,400` line from the stored high score, and four lines of rules printed directly on the menu: click to fire, large meteors split, destroying several at once is worth far more, and meteors that land between the cities do no damage.
 2. **HUD during play.** Score top centre, `WAVE 3` and a progress bar top left, ammo as `18 / 20` bottom centre under the battery, six city icons bottom left that grey out as cities die, and three small turret lights bottom right. The HUD is hidden on the main menu.
 3. **Game Over.** `GAME OVER`, the reason (`ALL CITIES LOST` or `TURRET DESTROYED`), final score, a `NEW BEST!` line when the record is beaten, buttons `Restart` and `Main Menu`.
 4. **Pause.** Opened with `Escape` or the Pause button in the HUD. `PAUSED`, buttons `Resume` and `Main Menu`. Only reachable during play.

@@ -16,6 +16,7 @@ If something here differs from `GDD.md`, **this file describes what the game rea
 | **Turret repair** | Clearing a wave repairs **one** hit point (never above 3). | Without it, slow reloading causes more hits and the run is lost for sure. |
 | **Two ways to lose** | The game ends when the last city is destroyed (`ALL CITIES LOST`) **or** when the turret is destroyed (`TURRET DESTROYED`). The Game Over screen shows which one. | A consequence of the turret hit points. |
 | **Ammo grows with the wave** | The shots for a wave are the number of meteors in that wave plus 25 percent, rounded up. The GDD had a fixed 20. | From about wave 6 a wave had more meteors than 20 shots. The ammo icon row stops growing at 50. |
+| **Meteors aimed at cities** | 70 percent of the meteors are aimed at a city that is still standing. The other 30 percent still land anywhere along the ground, as the GDD describes. | A friend who tested the game found it strange that many meteors landed on empty ground and nothing happened. Now most meteors threaten something, and the player still has to choose which ones to stop. |
 | **Pause** | `Escape` or the pause button in the HUD. Time and sound freeze together. Resume or go back to the main menu. | A basic feature every game needs. |
 
 ## 2. New feedback for the player
@@ -31,6 +32,7 @@ If something here differs from `GDD.md`, **this file describes what the game rea
 | **Warning siren** | A red rotating light on a post next to the turret, like the beacon on a real air defence launcher. It flashes brightest when it points at the camera. |
 | **Turret damage look** | One hit: light smoke. Two hits: heavy smoke. Three hits: the gun blows up and leaves a burning wreck. |
 | **Turret hit points in the HUD** | Three small round lights next to the ammo. The last one turns red. They are hidden on the main menu. |
+| **Marks on the ground** | Every meteor that lands leaves a ring that spreads out, a hot orange glow that cools down, and a dark scorch mark that fades away after a few seconds. So the player can see that a meteor really landed, also when it was harmless. The menu says it too: "Meteors that land between the cities do no damage." |
 | **Rising kill sound** | Each extra kill in one explosion plays the kill sound a little higher. The sound slot in `AudioManager` is empty for now, so it is silent until a clip is added. |
 | **More sound** | A reload sound, two blast sounds that alternate, a click on any mouse click while not playing (also on the pause screen), and the sounds have separate volume sliders. |
 
