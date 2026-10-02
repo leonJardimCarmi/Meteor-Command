@@ -8,26 +8,36 @@ By **Ilan** and **Leon**.
 
 ## How to play
 
-- **Left mouse click** - fire an interceptor at that point in the sky.
+- **Left mouse click** - fire an interceptor at the crosshair. A ring with an X shows where it will explode.
+- **Escape** (or the pause button) - pause and resume.
+- The battery needs a moment to **reload** between shots, so every shot counts.
 - Each wave gives you just enough shots to clear it, with a little extra - the number grows as the waves do, so don't waste them. Some meteors land on empty ground and are harmless.
 - **Large meteors split** into two smaller ones when you hit them.
-- Destroying **several meteors with one explosion** gives a big combo bonus (2 meteors = 400 points, 3 = 900, ...).
+- Destroying **several meteors with one explosion** gives a big combo bonus (2 meteors = 400 points, 3 = 900, ...), and the screen shows `DOUBLE!`, `TRIPLE!` and so on.
 - Shots you did not use at the end of a wave give a **bonus**, and then your ammo is refilled.
 - From wave 4 a fast **purple scout meteor** shows up. It does not split.
-- The game ends when the last city is destroyed. Your best score is saved.
+- **The turret can be hit too.** A meteor that lands next to it damages it: the reload gets twice as slow with every hit, and the third hit destroys it. Clearing a wave repairs one hit.
+- The game ends when the **last city** or the **turret** is destroyed. Your best score is saved.
 
 ## Screens
 
 - **Main menu** - Play, Quit, short rules and your best score.
-- **HUD** - wave number and progress bar, score, remaining shots and the six cities.
-- **Game over** - final score, `NEW BEST!` if you beat your record, Restart and Main Menu.
+- **HUD** - wave number and progress bar, score, remaining shots, the six cities and the three turret lights.
+- **Pause** - Resume and Main Menu.
+- **Game over** - why it ended (`ALL CITIES LOST` or `TURRET DESTROYED`), final score, `NEW BEST!` if you beat your record, Restart and Main Menu.
 
 ## What we used from the course
 
 - **Object pooling** - meteors, interceptors, explosions, effects and score pop-ups are reused instead of created and destroyed all the time.
-- **Coroutines** - the explosion (grow, hold, shrink), the waves, the wave banner and the camera shake.
+- **Coroutines** - the explosion (grow, hold, shrink), the waves, the wave banner, the camera shake, the slow motion, the combo words and the turret kick.
 - **Singleton** - `GameManager`, `PoolManager` and `CityManager`.
-- **Events** - scripts talk to each other with C# events (for example `City.Destroyed`, `GameManager.GameOver`), so the UI and the audio do not need to know about the game logic.
+- **Events (observer pattern)** - scripts talk to each other with C# events (for example `City.Destroyed`, `TurretHealth.Hit`, `GameManager.GameOver`), so the UI, the audio and the effects do not need to know about the game logic.
+- **Physics** - the explosion is a trigger collider that destroys the meteors it touches.
+- **UI** - a Canvas that scales with the screen size, TextMeshPro, and buttons that call the game manager.
+- **Audio** - `AudioManager` plays all the sounds and the music, with a volume slider for each in the Inspector.
+- **PlayerPrefs** - the best score is saved between runs.
+- **Gizmos** - in the Scene view you can see where meteors spawn and how close an impact must be to hit a city or the turret.
+- **Particle effects** - explosions, smoke and fire are particle systems made in code.
 - **Prefabs and the Inspector** - almost every number (speeds, wave sizes, blast radius, etc.) is a `[SerializeField]` so we can tune the game without touching the code.
 
 ## How to run
@@ -51,10 +61,16 @@ Assets/
   Fonts/       Orbitron and Bebas Neue
   Scenes/      Game.unity (the only scene)
 GDD.md         the game design document (images are in the images folder)
+GDD_BONUS.md   everything we added or changed after the GDD was approved
 ```
 
 Main scripts: `GameManager` (game states and score), `WaveSpawner` (the waves), `Meteor`, `Interceptor`, `Blast`,
-`City`, `PoolManager`, `UIManager` and `AudioManager`.
+`City`, `Battery` and `TurretHealth` (the turret), `PoolManager`, `UIManager` and `AudioManager`.
+
+## Documents
+
+- [`GDD.md`](GDD.md) - the approved game design document: what we planned.
+- [`GDD_BONUS.md`](GDD_BONUS.md) - what we added or changed on top of it while building the game, and why.
 
 ## Credits
 
