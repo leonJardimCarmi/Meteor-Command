@@ -9,7 +9,9 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 3D |
 | **Orientation & reference resolution** | Landscape, 1920 x 1080 reference |
 | **Expected session length** | 2 to 10 minutes |
-| **Document version** | v2.3, 2026-09-28 |
+| **Document version** | v2.4, 2026-10-02 |
+
+> Everything we added or changed after this document was approved is listed in `GDD_BONUS.md`. Where the two differ, `GDD_BONUS.md` describes what the game really does.
 
 ---
 
@@ -48,7 +50,7 @@ stateDiagram-v2
     WaveIntro --> Playing: 2 s banner
     Playing --> WaveClear: sky empty
     WaveClear --> WaveIntro: unused ammo bonus
-    Playing --> GameOver: last city destroyed
+    Playing --> GameOver: last city or the turret destroyed
     GameOver --> WaveIntro: Restart (after 0.5 s lockout)
     GameOver --> MainMenu: Menu
     Playing --> Paused: Escape or Pause button
@@ -66,7 +68,7 @@ stateDiagram-v2
 - **Splitting.** Two tiers only. A destroyed **Large** returns to the pool and spawns two **Small**, each rotated off the parent direction by `fragmentSpreadAngle`. A **Small** just dies. Fragments score independently and can be caught in one blast.
 - **Tier mix.** Waves 1 and 2 are all Small. From wave 3 each meteor has a `largeMeteorChance` of being Large, starting at 25 percent, rising 10 points per wave, capped at 60.
 - **Scoring.** Each meteor is worth 100, and a blast destroying *N* of them scores `100 x N x N`, so two kills is 400 and three is 900. This is the whole reason to wait for a cluster.
-- **Failure and running dry.** A meteor reaching `Y = 0` destroys the nearest city within `cityKillRadius` and is removed, otherwise it is harmless. The run ends when the sixth city dies. If ammo hits zero mid wave the battery stops firing and the rest land where they land: survivable, not an instant loss. The counter turns red below five shots.
+- **Failure and running dry.** A meteor reaching `Y = 0` destroys the nearest city within `cityKillRadius` and is removed, otherwise it is harmless. A meteor landing next to the battery damages it: three hits destroy it, and each hit doubles its reload time (see `GDD_BONUS.md`). The run ends when the sixth city dies or the turret is destroyed. If ammo hits zero mid wave the battery stops firing and the rest land where they land: survivable, not an instant loss. The counter turns red below five shots.
 - **Wave clear.** The wave has fully spawned and none are alive. Each unused interceptor awards `+25`, then ammo refills to that wave's ammo budget (see `extraAmmoFraction` below).
 
 ### Parameters you will need to tune
@@ -111,8 +113,8 @@ stateDiagram-v2
 ![Screen layouts: main menu, HUD, game over](images/screens-layout.png)
 
 1. **Main Menu.** Title `METEOR COMMAND`, buttons `Play` and `Quit`, a `Best: 12,400` line from the stored high score, and three lines of rules printed directly on the menu: click to fire, large meteors split, destroying several at once is worth far more.
-2. **HUD during play.** Score top centre, `WAVE 3` and a progress bar top left, ammo as `18 / 20` bottom centre under the battery, and six city icons bottom left that grey out as cities die.
-3. **Game Over.** `GAME OVER`, final score, a `NEW BEST!` line when the record is beaten, buttons `Restart` and `Main Menu`.
+2. **HUD during play.** Score top centre, `WAVE 3` and a progress bar top left, ammo as `18 / 20` bottom centre under the battery, six city icons bottom left that grey out as cities die, and three small turret lights bottom right. The HUD is hidden on the main menu.
+3. **Game Over.** `GAME OVER`, the reason (`ALL CITIES LOST` or `TURRET DESTROYED`), final score, a `NEW BEST!` line when the record is beaten, buttons `Restart` and `Main Menu`.
 4. **Pause.** Opened with `Escape` or the Pause button in the HUD. `PAUSED`, buttons `Resume` and `Main Menu`. Only reachable during play.
 
 - **Deliberately absent from the HUD:** no minimap, no timer, no combo meter. The score pop up at each blast already shows the multiplier when it matters.
@@ -230,7 +232,7 @@ graph TD
 - Mobile builds, touch input, or any mobile performance target
 - Gamepad support
 - Anything online: multiplayer, leaderboards, cloud saves
-- Destructible or repairable batteries, and multiple batteries
+- Multiple batteries. (The single battery can be damaged and repaired between waves, see `GDD_BONUS.md`.)
 - Physics driven debris, destructible terrain, or curving trajectories. Meteors travel straight, always
 - Any save beyond a single `PlayerPrefs` high score
 - More than one Unity scene
@@ -248,3 +250,4 @@ graph TD
 | v2.1 | 2026-09-26 | Ammo per wave (`extraAmmoFraction`) now scales with that wave's meteor count instead of a fixed 20, since later waves outgrew the fixed number. Dropped the layered mountains and distance fog: the sky is one AI-generated picture instead, and there is no longer any layered geometry for fog to read against |
 | v2.2 | 2026-09-26 | Checked off every item in 8.1 and 8.2 against the shipped game, and corrected the explosion VFX line: built as layered particle systems in code, not the Unity Particle Pack. Added `images/reference-missile-command.png` (credited in the README), which the document already linked to |
 | v2.3 | 2026-09-28 | Brought the asset table in section 6 in line with the shipped game: Kenney models for the meteors, turret, missile and city surroundings, buildings and explosion VFX built in code, sound and music from Pixabay, and the two fonts. Documented the pause screen, which the game already had: state diagram, controls, screens, scripts and scope |
+| v2.4 | 2026-10-02 | The turret can now be damaged: three hits, a slower reload after each, repair between waves, and the run also ends when it is destroyed. Updated the game over rule, the HUD and the out of scope list to match, and added `GDD_BONUS.md` for everything else we added after approval |
