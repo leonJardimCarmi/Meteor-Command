@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76dea51bee6c54b48822a0423e1b97cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomMeteorSpin
-  minTumbleSpeed: 6
-  maxTumbleSpeed: 18
+  _minTumbleSpeed: 6
+  _maxTumbleSpeed: 18
 --- !u!114 &7846403036468178873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef664e5024bdd8945bad1d535ea6448d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteorRedTint
-  redAmount: 1
+  _redAmount: 1
 --- !u!1 &4372683263077154543
 GameObject:
   m_ObjectHideFlags: 0
