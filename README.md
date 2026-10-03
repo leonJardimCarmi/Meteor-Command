@@ -1,16 +1,50 @@
 # Meteor Command
 
-A small arcade game we made in Unity for the final project of the Unity 101 course at MTA.
-Meteors fall from the sky toward six cities. You click to fire an interceptor, it explodes where you clicked,
-and everything inside the explosion is destroyed. Protect the cities as long as you can!
+An arcade game made in Unity. Meteors fall from the sky toward six cities. You click to fire an interceptor, it explodes
+where you clicked, and everything inside the explosion is destroyed. Protect the cities and your turret for as long as you can!
 
-By **Ilan** and **Leon**.
+## Submitted by
+
+- **אילן מושייב** (Ilan)
+- **לאון גרדים כרמי** (Leon)
+
+| | |
+|---|---|
+| **Course** | Unity 101 for CS Students, Academic College of Tel-Aviv Yaffo (MTA), 2026 |
+| **Project** | The final project, made by the two of us |
+| **Game** | Meteor Command, our own take on the arcade classic *Missile Command* (Atari, 1980) |
+| **Unity version** | 6000.3.20f1 (Unity 6.3 LTS), Universal Render Pipeline, 3D |
+| **Platform** | PC (Windows), played with the mouse |
 
 ## Screenshots
 
 | Main menu | During a wave | Start of a wave |
 |---|---|---|
 | ![Main menu](images/screenshot-menu.png) | ![Meteors falling, two cities already in ruins](images/screenshot-gameplay.png) | ![Wave banner, crosshair and HUD](images/screenshot-wave-start.png) |
+
+## How to run the game
+
+There are two ways. **Way 1 is the fastest and needs no installation.**
+
+### Way 1: play the ready-made game (no Unity needed)
+
+1. Open the [**Releases page**](https://github.com/leonJardimCarmi/Meteor-Command/releases/latest) and download **`MeteorCommand-Windows.zip`** (about 41 MB).
+2. Right click the ZIP file and choose **Extract All...** (do not run the game from inside the ZIP).
+3. Open the folder that was created and double click **`MeteorCommand.exe`**.
+
+Good to know:
+- You need Windows 10 or 11.
+- If Windows shows "Windows protected your PC", click **More info**, then **Run anyway**. It appears because the game is not signed by a company.
+- To quit, press the QUIT button in the main menu, or press Alt+F4.
+
+### Way 2: open the project in Unity
+
+1. Install [Unity Hub](https://unity.com/download) and then Unity **6000.3.20f1** (Unity 6.3 LTS), from the [Unity download archive](https://unity.com/releases/editor/archive).
+2. Get the project: on this page click the green **Code** button, then **Download ZIP**, and extract it. Or run `git clone https://github.com/leonJardimCarmi/Meteor-Command.git`.
+3. In Unity Hub click **Add**, then **Add project from disk**, and choose the project folder (the one that contains the `Assets` folder).
+4. Open the project. The first time takes a few minutes while Unity imports everything.
+5. The game scene opens by itself. If you see an empty scene, double click `Assets/Scenes/Game.unity` in the Project window (bottom of the screen).
+6. Press the **Play** button (the triangle at the top, in the middle).
 
 ## How to play
 
@@ -45,14 +79,6 @@ By **Ilan** and **Leon**.
 - **Gizmos** - in the Scene view you can see where meteors spawn and how close an impact must be to hit a city or the turret.
 - **Particle effects** - explosions, smoke and fire are particle systems made in code.
 - **Prefabs and the Inspector** - almost every number (speeds, wave sizes, blast radius, etc.) is a `[SerializeField]` so we can tune the game without touching the code.
-
-## How to run
-
-1. Install **Unity 6000.3.20f1** (Unity 6.3 LTS) with the Universal Render Pipeline.
-2. Clone the repository and open the folder with Unity Hub.
-3. The project opens the game scene for you. If you see an empty scene, double click `Assets/Scenes/Game.unity` in the Project window. Then press **Play**.
-
-The game is made for PC (Windows) and is played only with the mouse.
 
 ## Project structure
 
