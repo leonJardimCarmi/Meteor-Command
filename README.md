@@ -5,8 +5,8 @@ where you clicked, and everything inside the explosion is destroyed. Protect the
 
 ## Submitted by
 
-- **אילן מושייב** (Ilan)
-- **לאון גרדים כרמי** (Leon)
+- **אילן מושייב** (Ilan) - ת"ז / ID 322359274
+- **לאון גרדים כרמי** (Leon) - ת"ז / ID 314622762
 
 | | |
 |---|---|
